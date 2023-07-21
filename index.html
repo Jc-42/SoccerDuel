@@ -54,98 +54,39 @@
         soccerBall = new Ball(200, 0, this);
 
         //Ball collsion with player one
-        this.physics.add.collider(playerOne.getSprite(), soccerBall.getSprite(), function(player, ball) {
+        this.physics.add.collider(playerOne.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerOne, soccerBall, 1, this); return false;}, this);
 
-    }, function(player, ball) {
+        //Ball collision with player two
+        this.physics.add.collider(playerTwo.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerTwo, soccerBall, 2, this); return false;}, this);
 
-        var dx = playerOne.getX() - soccerBall.getX();
-        var dy = playerOne.getY() - soccerBall.getY() - soccerBall.getHeight();
-
-        if (Math.abs(dx) > Math.abs(dy)) {
-            if (dx > 0) {
-                console.log("Right");
-                //Right side of ball
-                soccerBall.setVelocityX(playerOne.getVelocityX() * 2 - 60);
-            } else {
-                console.log("Left");
-                //Left side of ball
-                soccerBall.setVelocityX(playerOne.getVelocityX() * 2 + 60);    
-               
-            }
-        } else {
-            if (dy > 0) {
-                //Bottom side of ball          
-                soccerBall.setVelocityX(soccerBall.getVelocityX() - (10 * (playerOne.getX() - soccerBall.getX())));
-                soccerBall.setVelocityY(-(Math.abs(playerOne.getVelocityY()) * 40) - 400);
-
-            } else {
-                //Top side of ball
-                //Make top behave the same as left and right, seems to make the collsions nicer
-                if (dx > 0) {
-                    console.log("Right");
-                    //Right side
-                    soccerBall.setVelocityX(playerOne.getVelocityX() * 2 - 60);
-                } else {
-                    console.log("Left");
-                    //Left side
-                    soccerBall.setVelocityX(playerOne.getVelocityX() * 2 + 60);   
-                }
-             
-            }
-        }
-
-        return false;
-
-        }, this);
-        this.physics.add.collider(playerTwo.getSprite(), soccerBall.getSprite(), function(player, ball) {
-
-    }, function(player, ball) {
-
-        var dx = playerTwo.getX() - soccerBall.getX();
-        var dy = playerTwo.getY() - soccerBall.getY() - soccerBall.getHeight();
-
-        if (Math.abs(dx) > Math.abs(dy)) {
-            if (dx > 0) {
-                console.log("Right");
-                //Right side of ball
-                soccerBall.setVelocityX(playerTwo.getVelocityX() * 2 - 60);
-            } else {
-                console.log("Left");
-                //Left side of ball
-                soccerBall.setVelocityX(playerTwo.getVelocityX() * 2 + 60);
-            }
-        } else {
-            if (dy > 0) {
-                //Bottom side of ball          
-                soccerBall.setVelocityX(soccerBall.getVelocityX() - (10 * (playerTwo.getX() - soccerBall.getX())));
-                soccerBall.setVelocityY(-(Math.abs(playerTwo.getVelocityY()) * 40) - 400);
-
-            } else {
-                //Top side of ball
-                //Make top behave the same as left and right, seems to make the collsions nicer
-                if (dx > 0) {
-                    console.log("Right");
-                    //Right side
-                    soccerBall.setVelocityX(playerTwo.getVelocityX() * 2 - 60);
-                } else {
-                console.log("Left");
-                //Left side
-                soccerBall.setVelocityX(playerTwo.getVelocityX() * 2 + 60);   
-                }
-             
-            }
-        }
-
-        return false;
-
-        }, this);
-        
         cursors = this.input.keyboard.createCursorKeys();
-        keys = this.input.keyboard.addKeys('W, A, D');
+        keys = this.input.keyboard.addKeys('W, A, S, D');
     }
 
  
 
+    function calculateCollision(player, ball, playerNum, scene) {
+        let currentTime = scene.time.now;
+        // Check if enough time has passed since the last kick
+        if (currentTime - player.getLastKickTime() < 200) {
+            // If not, return immediately without kicking
+            return;
+        }
+
+        //Kick code
+        if (playerNum === 1 && cursors.left.isDown && cursors.down.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && keys.A.isDown && keys.S.isDown && ball.getX() - player.getX() <= 0) {
+            ball.setVelocityX(ball.getVelocityX() - 90 - (Math.abs(player.getVelocityX())));
+            player.setLastKickTime(currentTime);
+        } else if (playerNum === 1 && cursors.right.isDown && cursors.down.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && keys.D.isDown && keys.S.isDown && ball.getX() - player.getX() > 0) {
+            ball.setVelocityX(ball.getVelocityX() + 90 + (Math.abs(player.getVelocityX())));
+            player.setLastKickTime(currentTime);
+        }
+        
+        if (playerNum === 1 && cursors.up.isDown && cursors.down.isDown || playerNum === 2 && keys.W.isDown && keys.S.isDown) {
+            ball.setVelocityY(-700);
+            player.setLastKickTime(currentTime);
+        }
+    }
     function update ()
     {   
         
@@ -176,7 +117,7 @@
             this.kickHitBox.setVisible(false); // Make the hitbox invisible
             this.kickHitBox.setSize(50, 50); // Set the size of the hitbox
             this.kickHitBox.setVelocity(0, 0); // Set the velocity of the hitbox
-            
+            this.lastKickTime = 0;
             this.num = n;
         }
         
@@ -311,6 +252,14 @@
         getHeight(){
             return this.player.body.height;
         }
+
+        getLastKickTime(){
+            return this.lastKickTime;
+        }
+
+        setLastKickTime(n){
+            this.lastKickTime = n;
+        }
         
         
         
@@ -388,7 +337,7 @@
         }
         
         setVelocityY(velY){
-            this.ball.setVelocityX(velY);
+            this.ball.setVelocityY(velY);
         }
         
     }
