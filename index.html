@@ -32,12 +32,17 @@
     var keys;
     var playerFacing;
     var playerOne;
+    var leftGoal;
+    var rightGoal;
+
     function preload ()
     {
         this.load.image('BlueRight', 'Sprites/Soccer_Blue-1.png');
         this.load.image('BlueLeft', 'Sprites/Soccer_Blue-2.png');
         this.load.image('SoccerBall', 'Sprites/Soccer_Ball-1.png');
         this.load.image('Background', 'Sprites/Background.png');
+        this.load.image('RightGoal', 'Sprites/Right_Goal.png');
+        this.load.image('LeftGoal', 'Sprites/Left_Goal.png');
         
     }
 
@@ -49,9 +54,11 @@
         
 
         // Create playerOne instance of Player class
-        playerOne = new Player(100, 100, this, 1);
-        playerTwo = new Player(900, 100, this, 2);
-        soccerBall = new Ball(200, 0, this);
+        playerOne = new Player(900, 100, this, 1);
+        playerTwo = new Player(100, 100, this, 2);
+        soccerBall = new Ball(550, 0, this);
+        leftGoal = new Goal(30, 600, 'LeftGoal', this);
+        rightGoal = new Goal(1152 - 30, 600, 'RightGoal', this);
 
         //Ball collsion with player one
         this.physics.add.collider(playerOne.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerOne, soccerBall, 1, this); return false;}, this);
@@ -59,6 +66,25 @@
         //Ball collision with player two
         this.physics.add.collider(playerTwo.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerTwo, soccerBall, 2, this); return false;}, this);
 
+        //Ball collision with the goals
+        this.physics.add.collider(leftGoal.getSprite(), soccerBall.getSprite(), function(goal, ball) {}, function(goal, ball) {
+            ball.setX(550);
+            ball.setY(0);
+            ball.setVelocityX(0);
+            ball.setVelocityY(0);
+            playerTwo.increaseScore();
+            return false;            
+        }, this);
+
+        this.physics.add.collider(rightGoal.getSprite(), soccerBall.getSprite(), function(goal, ball) {}, function(goal, ball) {
+            ball.setX(550);
+            ball.setY(0);
+            ball.setVelocityX(0);
+            ball.setVelocityY(0);
+            playerOne.increaseScore();
+            return false;            
+        }, this);
+            
         cursors = this.input.keyboard.createCursorKeys();
         keys = this.input.keyboard.addKeys('W, A, S, D');
     }
@@ -87,21 +113,14 @@
             player.setLastKickTime(currentTime);
         }
     }
+    
     function update ()
     {   
-        
-        
-        
-        
-        
+        console.log("Score: " + playerOne.score + " Score: " + playerTwo.score);
         //Movment & Controls
-        playerOne.update();
-        playerTwo.update();
-        soccerBall.update();
-        
-        
-        
-        
+        playerOne.update(cursors.up, cursors.left, cursors.down, cursors.right);
+        playerTwo.update(keys.W, keys.A, keys.S, keys.D);
+        soccerBall.update();  
     }
         
     class Player{
@@ -119,104 +138,58 @@
             this.kickHitBox.setVelocity(0, 0); // Set the velocity of the hitbox
             this.lastKickTime = 0;
             this.num = n;
+            this.score = 0;
         }
         
-        update(){
-           
-           
+        update(up, left, down, right){
 
-            
-            if(this.num === 1){
-                //Slowdown when not pressing anything or pressing oposite movement
-                if(cursors.left.isDown && cursors.right.isDown || !cursors.left.isDown && !cursors.right.isDown){
+            //Slowdown when not pressing anything or pressing oposite movement
+            if(left.isDown && right.isDown || !left.isDown && !right.isDown){
 
-                    if(this.player.body.blocked.down){
-                        this.player.setVelocityX(this.player.body.velocity.x * .7);
-                    }
-                    else{
-                         this.player.setVelocityX(this.player.body.velocity.x * .9);
-                    }
-
+                if(this.player.body.blocked.down){
+                    this.player.setVelocityX(this.player.body.velocity.x * .7);
+                }
+                else{
+                    this.player.setVelocityX(this.player.body.velocity.x * .9);
                 }
 
-                else if (cursors.left.isDown)
-                {
-                    this.player.setTexture('BlueLeft');
-                    //Move slower in the air
-                    if(!this.player.body.blocked.down){
-                         this.player.setVelocityX(this.player.body.velocity.x - 20);
-                    }
-                    else{   
-                        this.player.setVelocityX(this.player.body.velocity.x - 70);    
-                    }                
-
-
-                }
-                else if (cursors.right.isDown)
-                {
-                    this.player.setTexture('BlueRight');
-                     if(!this.player.body.blocked.down){
-                         this.player.setVelocityX(this.player.body.velocity.x + 20);
-                    }
-                    else{   
-                        this.player.setVelocityX(this.player.body.velocity.x + 70);    
-                    }  
-                }
-
-                //Jump
-                if(cursors.up.isDown && this.player.body.blocked.down){
-                    this.player.setVelocityY(-500)
-                }
             }
-            else if(this.num === 2){
-                //Slowdown when not pressing anything or pressing oposite movement
-                if(keys.A.isDown && keys.D.isDown || !keys.A.isDown && !keys.D.isDown){
 
-                    if(this.player.body.blocked.down){
-                        this.player.setVelocityX(this.player.body.velocity.x * .7);
-                    }
-                    else{
-                         this.player.setVelocityX(this.player.body.velocity.x * .9);
-                    }
-
+            else if (left.isDown)
+            {
+                this.player.setTexture('BlueLeft');
+                //Move slower in the air
+                if(!this.player.body.blocked.down){
+                        this.player.setVelocityX(this.player.body.velocity.x - 20);
                 }
-
-                else if (keys.A.isDown)
-                {
-                    this.player.setTexture('BlueLeft');
-                    //Move slower in the air
-                    if(!this.player.body.blocked.down){
-                         this.player.setVelocityX(this.player.body.velocity.x - 20);
-                    }
-                    else{   
-                        this.player.setVelocityX(this.player.body.velocity.x - 70);    
-                    }                
+                else{   
+                    this.player.setVelocityX(this.player.body.velocity.x - 70);    
+                }                
 
 
-                }
-                else if (keys.D.isDown)
-                {
-                    this.player.setTexture('BlueRight');
-                     if(!this.player.body.blocked.down){
-                         this.player.setVelocityX(this.player.body.velocity.x + 20);
-                    }
-                    else{   
-                        this.player.setVelocityX(this.player.body.velocity.x + 70);    
-                    }  
-                }
-
-                //Jump
-                if(keys.W.isDown && this.player.body.blocked.down){
-                    this.player.setVelocityY(-500)
-                }
             }
-            
+            else if (right.isDown)
+            {
+                this.player.setTexture('BlueRight');
+                    if(!this.player.body.blocked.down){
+                        this.player.setVelocityX(this.player.body.velocity.x + 20);
+                }
+                else{   
+                    this.player.setVelocityX(this.player.body.velocity.x + 70);    
+                }  
+            }
+
+            //Jump
+            if(up.isDown && this.player.body.blocked.down){
+                this.player.setVelocityY(-500)
+            }
 
 
             //Max horizontal speed
             if(Math.abs(this.player.body.velocity.x) > 500){
                 this.player.setVelocityX(500 * Math.sign(this.player.body.velocity.x));
             }
+            
             this.kickHitBox.x = this.player.x;
             this.kickHitBox.y = this.player.y;
             this.kickHitBox.setVelocityX(0);
@@ -260,6 +233,10 @@
         setLastKickTime(n){
             this.lastKickTime = n;
         }
+
+        increaseScore(){
+            this.score++;
+        }
         
         
         
@@ -271,7 +248,6 @@
             this.ball.setScale(2.2);
             this.ball.setBounce(1);
             this.ball.setCollideWorldBounds(true);
-            this.ball.setVelocity(Phaser.Math.Between(-200, 200), Phaser.Math.Between(-200, 200));
             this.ball.body.setCircle(12.5);
         }
         
@@ -339,9 +315,28 @@
         setVelocityY(velY){
             this.ball.setVelocityY(velY);
         }
+
+        setX(n){
+            this.x = n;
+        }
+
+        setY(n){
+            this.y = n;
+        }
         
     }
-        
+    
+    class Goal{
+        constructor(x, y, sprite, scene){
+            this.goal = scene.physics.add.sprite(x, y, sprite);
+            this.goal.body.setAllowGravity(false);
+            this.goal.setScale(1);
+        }
+
+        getSprite(){
+            return this.goal;
+        }
+    }
     </script>
 </body>
 </html>
