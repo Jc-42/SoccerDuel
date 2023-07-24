@@ -32,6 +32,8 @@
     var keys;
     var playerFacing;
     var playerOne;
+    var facingLeft;
+    var facingRight;
     var leftGoal;
     var rightGoal;
 
@@ -65,7 +67,6 @@
 
         //Ball collision with player two
         this.physics.add.collider(playerTwo.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerTwo, soccerBall, 2, this); return false;}, this);
-
         //Ball collision with the goals
         this.physics.add.collider(leftGoal.getSprite(), soccerBall.getSprite(), function(goal, ball) {}, function(goal, ball) {
             ball.setX(550);
@@ -100,18 +101,30 @@
         }
 
         //Kick code
-        if (playerNum === 1 && cursors.left.isDown && cursors.down.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && keys.A.isDown && keys.S.isDown && ball.getX() - player.getX() <= 0) {
-            ball.setVelocityX(ball.getVelocityX() - 90 - (Math.abs(player.getVelocityX())));
+        if (playerNum === 1 && cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && keys.A.isDown && ball.getX() - player.getX() <= 0 === true) {
+            ball.setVelocityX(-90 -(Math.abs(player.getVelocityX())));
             player.setLastKickTime(currentTime);
-        } else if (playerNum === 1 && cursors.right.isDown && cursors.down.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && keys.D.isDown && keys.S.isDown && ball.getX() - player.getX() > 0) {
-            ball.setVelocityX(ball.getVelocityX() + 90 + (Math.abs(player.getVelocityX())));
+        } else if (playerNum === 1 && cursors.right.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && keys.D.isDown && keys.D.isDown && ball.getX() - player.getX() > 0) {
+            ball.setVelocityX(90 + (Math.abs(player.getVelocityX()))); 
             player.setLastKickTime(currentTime);
         }
         
-        if (playerNum === 1 && cursors.up.isDown && cursors.down.isDown || playerNum === 2 && keys.W.isDown && keys.S.isDown) {
+        if (playerNum === 1 && cursors.up.isDown && cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && keys.W.isDown && keys.A.isDown && ball.getX() - player.getX() <= 0) {
             ball.setVelocityY(-700);
+            ball.setVelocityX(- 90 - (Math.abs(player.getVelocityX())));
             player.setLastKickTime(currentTime);
         }
+
+        else if (playerNum === 1 && cursors.up.isDown && cursors.right.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && keys.W.isDown && keys.D.isDown && ball.getX() - player.getX() <= 0) {
+            ball.setVelocityY(-700);
+            ball.setVelocityX(90 + (Math.abs(player.getVelocityX())));
+            player.setLastKickTime(currentTime);
+        }
+
+        if (playerNum === 1 && cursors.up.isDown || playerNum === 2 && keys.W.isDown) {
+            ball.setVelocityY(-700);
+        }
+        
     }
     
     function update ()
@@ -138,6 +151,7 @@
             this.kickHitBox.setVelocity(0, 0); // Set the velocity of the hitbox
             this.lastKickTime = 0;
             this.num = n;
+            
             this.score = 0;
         }
         
