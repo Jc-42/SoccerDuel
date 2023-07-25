@@ -36,6 +36,7 @@
     var facingRight;
     var leftGoal;
     var rightGoal;
+    var scoreText;
 
     function preload ()
     {
@@ -56,11 +57,11 @@
         
 
         // Create playerOne instance of Player class
-        playerOne = new Player(900, 100, this, 1);
-        playerTwo = new Player(100, 100, this, 2);
-        soccerBall = new Ball(550, 0, this);
+        playerOne = new Player(config.width * .75, 100, this, 1);
+        playerTwo = new Player(config.width / 4, 100, this, 2);
+        soccerBall = new Ball(config.width / 2, 0, this);
         leftGoal = new Goal(30, 600, 'LeftGoal', this);
-        rightGoal = new Goal(1152 - 30, 600, 'RightGoal', this);
+        rightGoal = new Goal(config.width - 30, 600, 'RightGoal', this);
 
         //Ball collsion with player one
         this.physics.add.collider(playerOne.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerOne, soccerBall, 1, this); return false;}, this);
@@ -69,25 +70,37 @@
         this.physics.add.collider(playerTwo.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerTwo, soccerBall, 2, this); return false;}, this);
         //Ball collision with the goals
         this.physics.add.collider(leftGoal.getSprite(), soccerBall.getSprite(), function(goal, ball) {}, function(goal, ball) {
-            ball.setX(550);
+            ball.setX(config.width / 2);
             ball.setY(0);
             ball.setVelocityX(0);
             ball.setVelocityY(0);
             playerTwo.increaseScore();
+            playerOne.setX(config.width * .75);
+            playerOne.setY(config.height);
+            playerTwo.setX(config.width / 4);
+            playerTwo.setY(config.height);
+            playerTwoScoreText.setText('Player 2 score: ' + playerTwo.score);
             return false;            
         }, this);
 
         this.physics.add.collider(rightGoal.getSprite(), soccerBall.getSprite(), function(goal, ball) {}, function(goal, ball) {
-            ball.setX(550);
+            ball.setX(config.width / 2);
             ball.setY(0);
             ball.setVelocityX(0);
             ball.setVelocityY(0);
             playerOne.increaseScore();
-            return false;            
+            playerOne.setX(config.width * .75);
+            playerOne.setY(config.height);
+            playerTwo.setX(config.width / 4);
+            playerTwo.setY(config.height);
+            playerOneScoreText.setText('Player 1 score: ' + playerOne.score);      
         }, this);
             
         cursors = this.input.keyboard.createCursorKeys();
         keys = this.input.keyboard.addKeys('W, A, S, D');
+
+        playerOneScoreText = this.add.text(100, 30, 'Player 1 score: 0', {fontSize: '25px', fill: '#000'});
+        playerTwoScoreText = this.add.text(config.width / 2 + 100, 30, 'Player 2 score: 0', {fontSize: '25px', fill: '#000'});
     }
 
  
@@ -251,6 +264,15 @@
         increaseScore(){
             this.score++;
         }
+
+        setX(n){
+            this.player.x = n;
+        }
+
+        setY(n){
+            this.player.y = n;
+        }
+        
         
         
         
