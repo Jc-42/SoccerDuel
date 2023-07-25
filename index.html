@@ -159,7 +159,29 @@
         //Up kick
         if (playerNum === 1 && cursors.up.isDown || playerNum === 2 && keys.W.isDown) {
             ball.setVelocityY(-700);
+            player.setLastKickTime(currentTime);
         }
+
+        if (playerNum === 1 && cursors.down.isDown && cursors.left.isDown && ball.getY() - player.getY() <= 0 || playerNum === 2 && keys.S.isDown && keys.A.isDown && ball.getY() - player.getY() <= 0) {
+            ball.setVelocityY(700);
+            ball.setVelocityX(- 90 - (Math.abs(player.getVelocityX())));
+            player.setLastKickTime(currentTime);
+        }
+
+        //Down and right kick
+        else if (playerNum === 1 && cursors.down.isDown && cursors.right.isDown && ball.getY() - player.getY() <= 0 || playerNum === 2 && keys.S.isDown && keys.D.isDown && ball.getY() - player.getY() <= 0) {
+            ball.setVelocityY(700);
+            ball.setVelocityX(90 + (Math.abs(player.getVelocityX())));
+            player.setLastKickTime(currentTime);
+        }
+
+        if (playerNum === 1 && cursors.down.isDown || playerNum === 2 && keys.S.isDown) {
+            ball.setVelocityY(700);
+            player.setLastKickTime(currentTime);
+        }
+
+
+        
         
     }
     
