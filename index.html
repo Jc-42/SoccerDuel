@@ -13,7 +13,7 @@
             default: 'arcade',
             arcade: {
                 gravity: { y: 1000 },
-                debug: true
+                //debug: true
             }
         },
         scene: {
@@ -55,43 +55,60 @@
 
         
 
-        // Create playerOne instance of Player class
         playerOne = new Player(900, 100, this, 1);
         playerTwo = new Player(100, 100, this, 2);
         soccerBall = new Ball(550, 0, this);
-        leftGoal = new Goal(30, 600, 'LeftGoal', this);
-        rightGoal = new Goal(1152 - 30, 600, 'RightGoal', this);
+        leftGoal = new Goal(22, 600, 'LeftGoal', this);
+        rightGoal = new Goal(config.width - 22, 600, 'RightGoal', this);
+        walls = [];
+       
+
 
         //Ball collsion with player one
         this.physics.add.collider(playerOne.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerOne, soccerBall, 1, this); return false;}, this);
 
         //Ball collision with player two
         this.physics.add.collider(playerTwo.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerTwo, soccerBall, 2, this); return false;}, this);
+        
         //Ball collision with the goals
         this.physics.add.collider(leftGoal.getSprite(), soccerBall.getSprite(), function(goal, ball) {}, function(goal, ball) {
-            ball.setX(550);
-            ball.setY(0);
-            ball.setVelocityX(0);
-            ball.setVelocityY(0);
-            playerTwo.increaseScore();
-            return false;            
+            //Score Code
+            if(Math.abs(soccerBall.getX() - leftGoal.getX()) < 10){
+                ball.setX(550);
+                ball.setY(0);
+                ball.setVelocityX(0);
+                ball.setVelocityY(0);
+                playerTwo.increaseScore();
+            }
+            return false; //Return false to override the default collision code so that the ball does not bounce off the goals
         }, this);
 
         this.physics.add.collider(rightGoal.getSprite(), soccerBall.getSprite(), function(goal, ball) {}, function(goal, ball) {
-            ball.setX(550);
-            ball.setY(0);
-            ball.setVelocityX(0);
-            ball.setVelocityY(0);
-            playerOne.increaseScore();
-            return false;            
+            //Score Code
+            if(Math.abs(soccerBall.getX() - rightGoal.getX()) < 10){
+                ball.setX(550);
+                ball.setY(0);
+                ball.setVelocityX(0);
+                ball.setVelocityY(0);
+                playerOne.increaseScore();
+            }
+            
+            return false; //Return false to override the default collision code so that the ball does not bounce off the goals     
         }, this);
+
+        //Add collision between the ball and the walls and the player and the walls
+        for(i = 0; i < walls.length; i++){
+            this.physics.add.collider(playerOne.getSprite(), walls[i].getSprite());
+            this.physics.add.collider(playerTwo.getSprite(), walls[i].getSprite());
+            this.physics.add.collider(soccerBall.getSprite(), walls[i].getSprite());
+        }
             
         cursors = this.input.keyboard.createCursorKeys();
         keys = this.input.keyboard.addKeys('W, A, S, D');
     }
 
  
-
+    //Calculates the collsion with the player and the ball
     function calculateCollision(player, ball, playerNum, scene) {
         let currentTime = scene.time.now;
         // Check if enough time has passed since the last kick
@@ -100,7 +117,7 @@
             return;
         }
 
-        //Kick code
+        //Kick code 
         if (playerNum === 1 && cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && keys.A.isDown && ball.getX() - player.getX() <= 0 === true) {
             ball.setVelocityX(-90 -(Math.abs(player.getVelocityX())));
             player.setLastKickTime(currentTime);
@@ -174,7 +191,7 @@
                 this.player.setTexture('BlueLeft');
                 //Move slower in the air
                 if(!this.player.body.blocked.down){
-                        this.player.setVelocityX(this.player.body.velocity.x - 20);
+                    this.player.setVelocityX(this.player.body.velocity.x - 20);
                 }
                 else{   
                     this.player.setVelocityX(this.player.body.velocity.x - 70);    
@@ -185,8 +202,9 @@
             else if (right.isDown)
             {
                 this.player.setTexture('BlueRight');
-                    if(!this.player.body.blocked.down){
-                        this.player.setVelocityX(this.player.body.velocity.x + 20);
+
+                if(!this.player.body.blocked.down){
+                    this.player.setVelocityX(this.player.body.velocity.x + 20);
                 }
                 else{   
                     this.player.setVelocityX(this.player.body.velocity.x + 70);    
@@ -244,6 +262,14 @@
             return this.lastKickTime;
         }
 
+        getHeight(){
+            return this.player.body.height;
+        }
+
+        getWidth(){
+            return this.player.body.height;
+        }
+
         setLastKickTime(n){
             this.lastKickTime = n;
         }
@@ -251,8 +277,6 @@
         increaseScore(){
             this.score++;
         }
-        
-        
         
     }
         
@@ -331,12 +355,13 @@
         }
 
         setX(n){
-            this.x = n;
+            this.ball.x = n;
         }
 
         setY(n){
-            this.y = n;
+            this.ball.y = n;
         }
+        
         
     }
     
@@ -350,7 +375,46 @@
         getSprite(){
             return this.goal;
         }
+
+        getHeight(){
+            return this.goal.body.height;
+        }
+
+        getWidth(){
+            return this.goal.body.height;
+        }
+        
+        getX(){
+            return this.goal.x;
+        }
+        
+        getY(){
+            return this.goal.y;
+        }
     }
+
+    class Wall {
+    constructor(x, y, width, height, color, scene) {
+        // Create a graphics object
+        let graphics = scene.make.graphics();
+
+        // Draw a rectangle on the graphics object
+        graphics.fillStyle(color);
+        graphics.fillRect(0, 0, width, height);
+
+        // Generate a texture from the graphics object
+        let textureKey = 'wallTexture' + x + y;
+        graphics.generateTexture(textureKey, width, height);
+
+        // Create a physics object using the generated texture
+        this.wall = scene.physics.add.staticImage(x, y, textureKey);
+    }
+
+    getSprite() {
+        return this.wall;
+    }
+}
+
     </script>
 </body>
 </html>
