@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+</head>
+<body>
+    <script>
+    class TitleScene extends Phaser.Scene{
+        constructor ()
+    {
+        super({ key: 'titleScene' });
+    }
+
+    preload(){
+        //menu screen
+        this.load.image("title_bg", "mainMenu/title_bg.png");
+        this.load.image("credit_button", "mainMenu/creditButton.png");
+        this.load.image("play_button", "mainMenu/playButton.png");
+        this.load.image("settings_button", "mainMenu/settingsButton.png");
+        this.load.image("arrow", "mainMenu/arrow.png");
+        
+        this.load.audio("titleMusic", "music/menuTheme.wav");
+        this.load.audio("menuSelect", "music/menuSelect.wav");
+        this.load.audio("menuHover", "music/menuHover.wav");
+        
+        //create loadingbar
+        let loadingBar = this.add.graphics({
+            fillStyle: {
+                color: 0xffffff//white
+            }
+        })
+        
+        
+        /*Loader events
+            complete - when done loading everything
+            progress - loader number progress in decimal
+        */
+        this.load.on("progress",(percent)=>{
+            loadingBar.fillRect(0,this.game.renderer.height/2,this.game.renderer.width*percent, 50);
+            console.log(percent)
+        })
+        
+        this.load.on("complete", ()=>{
+            //this.scene.start(CST.SCENES.MENU,"hello from loadScene");
+        })
+    }
+    
+    
+    
+    
+    create(){        
+        this.add.image(0,0,"title_bg").setOrigin(0).setDepth(1);
+        let creditButton = this.add.image(this.game.renderer.width/2.78,
+                       450,"credit_button").setDepth(2);
+        let settingButton = this.add.image(this.game.renderer.width/1.55,
+                       450,"settings_button").setDepth(2);
+        let playButton = this.add.image(this.game.renderer.width/2,
+                    285,"play_button").setDepth(2);  
+        
+        
+        this.sound.pauseOnBlur = false
+        this.sound.play("titleMusic",{
+            loop: true
+        })
+        
+        //let title = this.add.image(0,0,"Title").setOrigin(0).setDepth(2);
+        
+        let hoverSprite = this.add.sprite(100,100,"arrow").setDepth(3);
+        hoverSprite.setScale(0.1);
+        hoverSprite.setVisible(false);
+        
+       // hoverSprite.setScale()
+        
+        /*pointer events:
+            pointerover- hovering
+            pointerout - not hovering
+            pointerup - click and release
+            pointerdown - just click
+        */
+        //PLAY BUTTON
+        playButton.setInteractive();        
+        playButton.on("pointerover",()=>{
+            console.log("hover");
+            hoverSprite.setVisible(true);
+            hoverSprite.x = playButton.x - playButton.width/1.5;
+            hoverSprite.y = playButton.y;
+            this.sound.play("menuHover");  
+        })        
+        playButton.on("pointerout",()=>{
+            console.log("out");
+            hoverSprite.setVisible(false);
+        })       
+        playButton.on("pointerup",()=>{
+            console.log("Open home")
+            this.sound.play("menuSelect");
+            this.scene.start("homeScene");
+
+        })
+        
+        //CREDIT BUTTON
+        creditButton.setInteractive();       
+        creditButton.on("pointerover",()=>{
+            console.log("hover");
+            hoverSprite.setVisible(true);
+            hoverSprite.x = creditButton.x - creditButton.width/1.3;
+            hoverSprite.y = creditButton.y;
+            this.sound.play("menuHover");
+        })     
+        creditButton.on("pointerout",()=>{
+            console.log("out");
+            hoverSprite.setVisible(false);
+        })        
+        creditButton.on("pointerup",()=>{
+            console.log("Open credit")
+            this.sound.play("menuSelect");
+        })
+        
+        //SETTING BUTTON
+        settingButton.setInteractive();       
+        settingButton.on("pointerover",()=>{
+            console.log("hover");
+            hoverSprite.setVisible(true);
+            hoverSprite.x = settingButton.x - settingButton.width/1.3;
+            hoverSprite.y = settingButton.y;
+            this.sound.play("menuHover");
+        })     
+        settingButton.on("pointerout",()=>{
+            console.log("out");
+            hoverSprite.setVisible(false);
+        })        
+        settingButton.on("pointerup",()=>{
+            console.log("Open credit")
+            this.sound.play("menuSelect");
+        })
+        
+    }
+}
+
+    var soccerBall;
+    var cursors;
+    var keys;
+    var playerFacing;
+    var playerOne;
+    var playerTwo;
+    var ground;
+    var map;
+        
+    var gui;
+    var scoreBoard;
+    var goals=0;
+    var playerOneGoals = 0;
+    var playerTwoGoals = 0;
+
+
+
+class HomeScene extends Phaser.Scene{
+    constructor(){
+        super({ key: "homeScene"});
+    }
+    
+    preload(){
+        this.load.image("HomeScreen", "homeScreen/home_bg.png");
+        this.load.image("MapButton", "homeScreen/mapButton.png");
+        this.load.image('player_1', 'Sprites/Soccer_Blue-1.png');
+        this.load.image('player_2', 'Sprites/Soccer_Blue-2.png');
+    }
+    
+    create(){
+        const homeScreen = this.add.image(0,0,"HomeScreen").setOrigin(0);
+        var mapButton = this.add.image(1000,604,"MapButton");
+        
+        var player1 = this.add.image(200,600,"player_1");
+        player1.set.scale(9);
+        var player2 = this.add.image(300,600,"player_2");
+        
+        mapButton.setInteractive();       
+        mapButton.on("pointerover",()=>{
+            console.log("hover");
+            hoverSprite.setVisible(true);
+//            hoverSprite.x = mapButton.x - creditButton.width/1.3;
+//            hoverSprite.y = creditButton.y;
+            this.sound.play("menuHover");
+        })     
+        mapButton.on("pointerout",()=>{
+            console.log("out");
+   //         hoverSprite.setVisible(false);
+        })        
+        mapButton.on("pointerup",()=>{
+            console.log("Open game")
+            this.sound.play("menuSelect");
+            this.scene.start("playScene");
+        })
+        
+    } 
+    
+}
+
+class PlayScene extends Phaser.Scene{
+       constructor ()
+    {
+        super({ key: 'playScene' });
+    }
+    
+    preload(){
+        this.load.image('BlueRight', 'Sprites/Soccer_Blue-1.png');
+        this.load.image('BlueLeft', 'Sprites/Soccer_Blue-2.png');
+        this.load.image('SoccerBall', 'Sprites/Soccer_Ball-1.png');
+        this.load.image("tiles", "tiles/tilesheet_complete.png");
+        this.load.tilemapTiledJSON("grassyField", "tiles/defaultField.tmj");
+    }
+    
+    create(){
+        
+        
+        //background
+        this.map = this.make.tilemap({key: "grassyField"});
+        const tileset = this.map.addTilesetImage("defaultField", "tiles");
+
+        this.ground = this.map.createLayer("Tile Layer 1", tileset);
+        const sky = this.map.createLayer("Tile Layer 4", tileset);
+        const landscape = this.map.createLayer("Tile Layer 2", tileset);
+        const flowers = this.map.createLayer("Tile Layer 3", tileset);
+        
+        //this.explosion = this.add.sprite(0, 0, 'boom').setVisible(false);
+
+        
+        this.ground.setCollision(201);
+        
+//        var leftGoal = this.add.image(32,576,"LeftGoal");
+//        var rightGoal = this.add.image(1120,576,"RightGoal");
+        
+        
+        scoreBoard = this.add.text(16, 16, 'Timer:\nHome:' + 
+                                   gui + "\tVisitor:" +
+                                   playerTwoGoals, {fontSize: '32px', fill: '#000'});
+
+        
+
+        // Create playerOne instance of Player class
+        playerOne = new Player(100, 100, this, 1);
+        playerTwo = new Player(900, 100, this, 2);
+        soccerBall = new Ball(200, 0, this);
+        
+        //ground collison w/players
+        this.physics.add.collider(playerOne.getSprite(), this.ground);
+        this.physics.add.collider(playerTwo.getSprite(), this.ground);
+        this.physics.add.collider(soccerBall.getSprite(), this.ground);
+
+        //Ball collision with player one
+        this.physics.add.collider(playerOne.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerOne, soccerBall, 1, this); return false;}, this);
+
+        //Ball collision with player two
+        this.physics.add.collider(playerTwo.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerTwo, soccerBall, 2, this); return false;}, this);
+        
+
+        cursors = this.input.keyboard.createCursorKeys();
+        keys = this.input.keyboard.addKeys('W, A, S, D');
+        
+    }
+    
+    update() {
+        playerOne.update();
+        playerTwo.update();
+        soccerBall.update();
+    }
+    
+    
+}     
+        
+        
+    function dash (player,soda){
+        soda.disableBody(true, true);
+        player.setVelocityX(player.getVelocityX*2);
+        player.setVelocityY(player.getVelocityY*2);
+    }
+
+        
+    class powerUp extends Phaser.Physics.Arcade.Sprite
+    {
+        constructor(scene, x, y,fram)
+        {
+            super(scene, x, y, frame);
+            scene.add.existing(this);
+            scene.physics.add.existing(this);
+            this.setCollideWorldBounds(true);
+            this.setGravityY(1000);
+        }
+                
+        getSprite(){
+            return this.player;
+        }
+        
+    }
+
+ 
+
+    function calculateCollision(player, ball, playerNum, scene) {
+        let currentTime = scene.time.now;
+        // Check if enough time has passed since the last kick
+        if (currentTime - player.getLastKickTime() < 200) {
+            // If not, return immediately without kicking
+            return;
+        }
+
+        //Kick code
+        if (playerNum === 1 && cursors.left.isDown && cursors.down.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && keys.A.isDown && keys.S.isDown && ball.getX() - player.getX() <= 0) {
+            ball.setVelocityX(ball.getVelocityX() - 90 - (Math.abs(player.getVelocityX())));
+            player.setLastKickTime(currentTime);
+        } else if (playerNum === 1 && cursors.right.isDown && cursors.down.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && keys.D.isDown && keys.S.isDown && ball.getX() - player.getX() > 0) {
+            ball.setVelocityX(ball.getVelocityX() + 90 + (Math.abs(player.getVelocityX())));
+            player.setLastKickTime(currentTime);
+        }
+        
+        if (playerNum === 1 && cursors.up.isDown && cursors.down.isDown || playerNum === 2 && keys.W.isDown && keys.S.isDown) {
+            ball.setVelocityY(-700);
+            player.setLastKickTime(currentTime);
+        }
+    }
+    function update ()
+    {   
+        
+        //Movment & Controls
+        playerOne.update();
+        playerTwo.update();
+        soccerBall.update();
+        
+        
+        
+    }
+        
+
+        
+    class Player{
+        constructor(x, y, scene, n){
+            this.player = scene.physics.add.sprite(x, y, 'BlueRight');
+            this.player.setVelocity(0, 0);
+            this.player.setBounce(0, 0);
+            this.player.setCollideWorldBounds(true);
+            this.player.setScale(3.4);
+            this.player.body.setSize(9, 24, 4.5, 12);
+                                
+            this.kickHitBox = scene.physics.add.sprite(this.player.x, this.player.y, null);
+            this.kickHitBox.setVisible(false); // Make the hitbox invisible
+            this.kickHitBox.setSize(50, 50); // Set the size of the hitbox
+            this.kickHitBox.setVelocity(0, 0); // Set the velocity of the hitbox
+            this.lastKickTime = 0;
+            this.num = n;
+        //    this.physics.collide(this.player,this.ground);
+        }
+        
+        update(){
+
+            
+            if(this.num === 1){
+                //Slowdown when not pressing anything or pressing oposite movement
+                if(cursors.left.isDown && cursors.right.isDown || !cursors.left.isDown && !cursors.right.isDown){
+
+                    if(this.player.body.blocked.down){
+                        this.player.setVelocityX(this.player.body.velocity.x * .7);
+                    }
+                    else{
+                         this.player.setVelocityX(this.player.body.velocity.x * .9);
+                    }
+
+                }
+
+                else if (cursors.left.isDown)
+                {
+                    this.player.setTexture('BlueLeft');
+                    //Move slower in the air
+                    if(!this.player.body.blocked.down){
+                         this.player.setVelocityX(this.player.body.velocity.x - 20);
+                    }
+                    else{   
+                        this.player.setVelocityX(this.player.body.velocity.x - 70);    
+                    }                
+
+
+                }
+                else if (cursors.right.isDown)
+                {
+                    this.player.setTexture('BlueRight');
+                     if(!this.player.body.blocked.down){
+                         this.player.setVelocityX(this.player.body.velocity.x + 20);
+                    }
+                    else{   
+                        this.player.setVelocityX(this.player.body.velocity.x + 70);    
+                    }  
+                }
+
+                //Jump
+                if(cursors.up.isDown && this.player.body.blocked.down){
+                    this.player.setVelocityY(-500)
+                }
+            }
+            else if(this.num === 2){
+                //Slowdown when not pressing anything or pressing oposite movement
+                if(keys.A.isDown && keys.D.isDown || !keys.A.isDown && !keys.D.isDown){
+
+                    if(this.player.body.blocked.down){
+                        this.player.setVelocityX(this.player.body.velocity.x * .7);
+                    }
+                    else{
+                         this.player.setVelocityX(this.player.body.velocity.x * .9);
+                    }
+
+                }
+
+                else if (keys.A.isDown)
+                {
+                    this.player.setTexture('BlueLeft');
+                    //Move slower in the air
+                    if(!this.player.body.blocked.down){
+                         this.player.setVelocityX(this.player.body.velocity.x - 20);
+                    }
+                    else{   
+                        this.player.setVelocityX(this.player.body.velocity.x - 70);    
+                    }                
+
+
+                }
+                else if (keys.D.isDown)
+                {
+                    this.player.setTexture('BlueRight');
+                     if(!this.player.body.blocked.down){
+                         this.player.setVelocityX(this.player.body.velocity.x + 20);
+                    }
+                    else{   
+                        this.player.setVelocityX(this.player.body.velocity.x + 70);    
+                    }  
+                }
+
+                //Jump
+                if(keys.W.isDown && this.player.body.blocked.down){
+                    this.player.setVelocityY(-500)
+                }
+                
+            }
+            
+
+
+            //Max horizontal speed
+            if(Math.abs(this.player.body.velocity.x) > 500){
+                this.player.setVelocityX(500 * Math.sign(this.player.body.velocity.x));
+            }
+            this.kickHitBox.x = this.player.x;
+            this.kickHitBox.y = this.player.y;
+            this.kickHitBox.setVelocityX(0);
+            this.kickHitBox.setVelocityY(0);
+
+        
+        }
+        
+        getSprite(){
+            return this.player;
+        }
+        
+        getX(){
+            return this.player.x;
+        }
+        
+        getY(){
+            return this.player.y;
+        }
+        
+        getVelocityX(){
+            return this.player.body.velocity.x;
+        }
+        
+        getVelocityY(){
+            return this.player.body.velocity.y;
+        }
+        
+        getWidth(){
+            return this.player.body.width;
+        }
+        
+        getHeight(){
+            return this.player.body.height;
+        }
+
+        getLastKickTime(){
+            return this.lastKickTime;
+        }
+
+        setLastKickTime(n){
+            this.lastKickTime = n;
+        }
+        
+        
+        
+    }
+        
+    class Ball{
+        constructor(x, y, scene){
+            this.ball = scene.physics.add.sprite(x, y, 'SoccerBall');
+            this.ball.setScale(2.2);
+            this.ball.setBounce(1);
+            this.ball.setCollideWorldBounds(true);
+            this.ball.setVelocity(Phaser.Math.Between(-200, 200), Phaser.Math.Between(-200, 200));
+            this.ball.body.setCircle(12.5);
+        }
+        
+        update(){
+            
+            if(Math.abs(this.ball.body.velocity.x) > 700){
+                this.ball.setVelocityX(700 * Math.sign(this.ball.body.velocity.x));
+            }
+            if(Math.abs(this.ball.body.velocity.y) > 700){
+                this.ball.setVelocityY(700 * Math.sign(this.ball.body.velocity.y))
+            }
+
+            //Add friction to the ball
+            if(this.ball.body.blocked.down){
+                this.ball.setVelocityX(this.ball.body.velocity.x * .7);
+                this.ball.setVelocityY(this.ball.body.velocity.y * .7);
+            }
+            else if(this.ball.body.blocked.left || this.ball.body.blocked.right){
+                this.ball.setVelocityX(this.ball.body.velocity.x * .7);
+                this.ball.setVelocityY(this.ball.body.velocity.y * .7);
+            }
+            else{
+                //ball.setVelocityX(ball.body.velocity.x * .9);
+                //ball.setVelocityY(ball.body.velocity.y * .9);
+            }
+
+            //Ball will always bounce
+            if(this.ball.body.blocked.down && Math.abs(this.ball.body.velocity.y) < 400){
+                this.ball.setVelocityY(-400);
+            }
+        }
+        
+        getSprite(){
+            return this.ball;
+        }
+        
+        getX(){
+            return this.ball.x;
+        }
+        
+        getY(){
+            return this.ball.y;
+        }
+        
+        getVelocityX(){
+            return this.ball.body.velocity.x;
+        }
+        
+        getVelocityY(){
+            return this.ball.body.velocity.y;
+        }
+        
+        getWidth(){
+            return this.ball.body.width;
+        }
+        
+        getHeight(){
+            return this.ball.body.height;
+        }
+        
+        setVelocityX(velX){
+            this.ball.setVelocityX(velX);
+        }
+        
+        setVelocityY(velY){
+            this.ball.setVelocityY(velY);
+        }
+        
+    }
+
+
+
+
+
+var config = {
+        type: Phaser.AUTO,
+        width: 1152,
+        height: 704,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 1000 },
+                debug: true
+            }
+        },
+        scene: [TitleScene, PlayScene, HomeScene],
+    /*{
+//            preload: preload,
+//            create: create,
+//            update: update, 
+            scene: Scene1
+
+        },
+        */
+        pixelArt: true,
+        roundPixels: true
+    };
+
+   var game = new Phaser.Game(config);
+        
+    </script>
+</body>
+</html>
