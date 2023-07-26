@@ -37,6 +37,8 @@
     var facingRight;
     var leftGoal;
     var rightGoal;
+    var scoreText;
+    var walls;
 
     var currTime = 0;
     var DashTime = 200;
@@ -59,14 +61,13 @@
 
         
 
-        playerOne = new Player(900, 100, this, 1);
-        playerTwo = new Player(100, 100, this, 2);
-        soccerBall = new Ball(550, 0, this);
-        leftGoal = new Goal(22, 600, 'LeftGoal', this);
-        rightGoal = new Goal(config.width - 22, 600, 'RightGoal', this);
+        // Create playerOne instance of Player class
+        playerOne = new Player(config.width * .75, 100, this, 1);
+        playerTwo = new Player(config.width / 4, 100, this, 2);
+        soccerBall = new Ball(config.width / 2, 0, this);
+        leftGoal = new Goal(30, 600, 'LeftGoal', this);
+        rightGoal = new Goal(config.width - 30, 600, 'RightGoal', this);
         walls = [];
-       
-
 
         //Ball collsion with player one
         this.physics.add.collider(playerOne.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerOne, soccerBall, 1, this); return false;}, this);
@@ -76,28 +77,35 @@
         
         //Ball collision with the goals
         this.physics.add.collider(leftGoal.getSprite(), soccerBall.getSprite(), function(goal, ball) {}, function(goal, ball) {
-            //Score Code
             if(Math.abs(soccerBall.getX() - leftGoal.getX()) < 10){
-                ball.setX(550);
+                ball.setX(config.width / 2);
                 ball.setY(0);
                 ball.setVelocityX(0);
                 ball.setVelocityY(0);
                 playerTwo.increaseScore();
+                playerOne.setX(config.width * .75);
+                playerOne.setY(config.height);
+                playerTwo.setX(config.width / 4);
+                playerTwo.setY(config.height);
+                playerTwoScoreText.setText('Player 2 score: ' + playerTwo.score);
             }
-            return false; //Return false to override the default collision code so that the ball does not bounce off the goals
+            return false;            
         }, this);
 
         this.physics.add.collider(rightGoal.getSprite(), soccerBall.getSprite(), function(goal, ball) {}, function(goal, ball) {
-            //Score Code
             if(Math.abs(soccerBall.getX() - rightGoal.getX()) < 10){
-                ball.setX(550);
+                ball.setX(config.width / 2);
                 ball.setY(0);
                 ball.setVelocityX(0);
                 ball.setVelocityY(0);
                 playerOne.increaseScore();
+                playerOne.setX(config.width * .75);
+                playerOne.setY(config.height);
+                playerTwo.setX(config.width / 4);
+                playerTwo.setY(config.height);
+                playerOneScoreText.setText('Player 1 score: ' + playerOne.score); 
             }
-            
-            return false; //Return false to override the default collision code so that the ball does not bounce off the goals     
+            return false;            
         }, this);
 
         //Add collision between the ball and the walls and the player and the walls
@@ -109,6 +117,9 @@
             
         cursors = this.input.keyboard.createCursorKeys();
         keys = this.input.keyboard.addKeys('W, A, S, D');
+
+        playerOneScoreText = this.add.text(100, 30, 'Player 1 score: 0', {fontSize: '25px', fill: '#000'});
+        playerTwoScoreText = this.add.text(config.width / 2 + 100, 30, 'Player 2 score: 0', {fontSize: '25px', fill: '#000'});
     }
 
  
@@ -122,26 +133,33 @@
         }
 
         //Kick code 
+
+        //Left straight kick
         if (playerNum === 1 && cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && keys.A.isDown && ball.getX() - player.getX() <= 0 === true) {
             ball.setVelocityX(-90 -(Math.abs(player.getVelocityX())));
             player.setLastKickTime(currentTime);
+
+        //Right straight kick
         } else if (playerNum === 1 && cursors.right.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && keys.D.isDown && keys.D.isDown && ball.getX() - player.getX() > 0) {
             ball.setVelocityX(90 + (Math.abs(player.getVelocityX()))); 
             player.setLastKickTime(currentTime);
         }
         
+        //Up and left kick
         if (playerNum === 1 && cursors.up.isDown && cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && keys.W.isDown && keys.A.isDown && ball.getX() - player.getX() <= 0) {
             ball.setVelocityY(-700);
             ball.setVelocityX(- 90 - (Math.abs(player.getVelocityX())));
             player.setLastKickTime(currentTime);
         }
 
+        //Up and right kick
         else if (playerNum === 1 && cursors.up.isDown && cursors.right.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && keys.W.isDown && keys.D.isDown && ball.getX() - player.getX() <= 0) {
             ball.setVelocityY(-700);
             ball.setVelocityX(90 + (Math.abs(player.getVelocityX())));
             player.setLastKickTime(currentTime);
         }
 
+        //Up kick
         if (playerNum === 1 && cursors.up.isDown || playerNum === 2 && keys.W.isDown) {
             ball.setVelocityY(-700);
         }
@@ -385,6 +403,16 @@
         increaseScore(){
             this.score++;
         }
+
+        setX(n){
+            this.player.x = n;
+        }
+
+        setY(n){
+            this.player.y = n;
+        }
+        
+        
         
     }
         
@@ -502,26 +530,26 @@
     }
 
     class Wall {
-    constructor(x, y, width, height, color, scene) {
-        // Create a graphics object
-        let graphics = scene.make.graphics();
+        constructor(x, y, width, height, color, scene) {
+            // Create a graphics object
+            let graphics = scene.make.graphics();
 
-        // Draw a rectangle on the graphics object
-        graphics.fillStyle(color);
-        graphics.fillRect(0, 0, width, height);
+            // Draw a rectangle on the graphics object
+            graphics.fillStyle(color);
+            graphics.fillRect(0, 0, width, height);
 
-        // Generate a texture from the graphics object
-        let textureKey = 'wallTexture' + x + y;
-        graphics.generateTexture(textureKey, width, height);
+            // Generate a texture from the graphics object
+            let textureKey = 'wallTexture' + x + y;
+            graphics.generateTexture(textureKey, width, height);
 
-        // Create a physics object using the generated texture
-        this.wall = scene.physics.add.staticImage(x, y, textureKey);
+            // Create a physics object using the generated texture
+            this.wall = scene.physics.add.staticImage(x, y, textureKey);
+        }
+
+        getSprite() {
+            return this.wall;
+        }
     }
-
-    getSprite() {
-        return this.wall;
-    }
-}
 
     </script>
 </body>
