@@ -7,27 +7,28 @@
 
 <body>
     <script>
-        // JPS commit comment
-
-        class Player {
-            constructor(x, y, scene, n, name) {
-                this.player = scene.physics.add.sprite(x, y, name);
-                this.player.setVelocity(0, 0);
-                this.player.setBounce(0, 0);
-                this.player.setCollideWorldBounds(true);
-                this.player.setScale(3.4);
-                this.player.body.setSize(9, 24, 4.5, 12);
-
-                this.kickHitBox = scene.physics.add.sprite(this.player.x, this.player.y, null);
-                this.kickHitBox.setVisible(false); // Make the hitbox invisible
-                this.kickHitBox.setSize(50, 50); // Set the size of the hitbox
-                this.kickHitBox.setVelocity(0, 0); // Set the velocity of the hitbox
-                this.lastKickTime = 0;
-                this.num = n;
-                this.score = 0;
-            }
-
-            update(up, left, down, right) {
+    // JPS commit comment
+        
+    class Player{
+        constructor(x, y, scene, n, direction){
+            this.player = scene.physics.add.sprite(x, y, direction);
+            this.player.setVelocity(0, 0);
+            this.player.setBounce(0, 0);
+            this.player.setCollideWorldBounds(true);
+            this.player.setScale(3.4);
+            this.player.body.setSize(9, 24, 4.5, 12);
+                                
+            this.kickHitBox = scene.physics.add.sprite(this.player.x, this.player.y, null);
+            this.kickHitBox.setVisible(false); // Make the hitbox invisible
+            this.kickHitBox.setSize(50, 50); // Set the size of the hitbox
+            this.kickHitBox.setVelocity(0, 0); // Set the velocity of the hitbox
+            this.lastKickTime = 0;
+            this.num = n;
+            
+            this.score = 0;
+        }
+        
+        update(up, left, down, right){
 
                 //Slowdown when not pressing anything or pressing oposite movement
                 if (left.isDown && right.isDown || !left.isDown && !right.isDown) {
@@ -70,47 +71,46 @@
                 }
 
 
-                //Max horizontal speed
-                if (Math.abs(this.player.body.velocity.x) > 500) {
-                    this.player.setVelocityX(500 * Math.sign(this.player.body.velocity.x));
-                }
-
-                this.kickHitBox.x = this.player.x;
-                this.kickHitBox.y = this.player.y;
-                this.kickHitBox.setVelocityX(0);
-                this.kickHitBox.setVelocityY(0);
-
-
-
+            //Max horizontal speed
+            if(Math.abs(this.player.body.velocity.x) > 500){
+                this.player.setVelocityX(500 * Math.sign(this.player.body.velocity.x));
             }
+            
+            this.kickHitBox.x = this.player.x;
+            this.kickHitBox.y = this.player.y;
+            this.kickHitBox.setVelocityX(0);
+            this.kickHitBox.setVelocityY(0);
 
-            getSprite() {
-                return this.player;
-            }
-
-            getX() {
-                return this.player.x;
-            }
-
-            getY() {
-                return this.player.y;
-            }
-
-            getVelocityX() {
-                return this.player.body.velocity.x;
-            }
-
-            getVelocityY() {
-                return this.player.body.velocity.y;
-            }
-
-            getWidth() {
-                return this.player.body.width;
-            }
-
-            getHeight() {
-                return this.player.body.height;
-            }
+        
+        }
+        
+        getSprite(){
+            return this.player;
+        }
+        
+        getX(){
+            return this.player.x;
+        }
+        
+        getY(){
+            return this.player.y;
+        }
+        
+        getVelocityX(){
+            return this.player.body.velocity.x;
+        }
+        
+        getVelocityY(){
+            return this.player.body.velocity.y;
+        }
+        
+        getWidth(){
+            return this.player.body.width;
+        }
+        
+        getHeight(){
+            return this.player.body.height;
+        }
 
             getLastKickTime() {
                 return this.lastKickTime;
@@ -136,54 +136,45 @@
                 this.player.x = n;
             }
 
-            setY(n) {
-                this.player.y = n;
-            }
-
-            isTouchingGround() {
-                if (this.player.body.blocked.down) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-
-
-
+        setY(n){
+            this.player.y = n;
         }
-
-        class Ball {
-            constructor(x, y, scene) {
-                this.ball = scene.physics.add.sprite(x, y, 'SoccerBall');
-                this.ball.setScale(2.2);
-                this.ball.setBounce(1);
-                this.ball.setCollideWorldBounds(true);
-                this.ball.body.setCircle(12.5);
+        
+        
+        
+    }
+        
+    class Ball{
+        constructor(x, y, scene){
+            this.ball = scene.physics.add.sprite(x, y, 'SoccerBall');
+            this.ball.setScale(2.2);
+            this.ball.setBounce(1);
+            this.ball.setCollideWorldBounds(true);
+            this.ball.body.setCircle(12.5);
+        }
+        
+        update(){
+            
+            if(Math.abs(this.ball.body.velocity.x) > 700){
+                this.ball.setVelocityX(700 * Math.sign(this.ball.body.velocity.x));
+            }
+            if(Math.abs(this.ball.body.velocity.y) > 700){
+                this.ball.setVelocityY(700 * Math.sign(this.ball.body.velocity.y))
             }
 
-            update() {
-
-                if (Math.abs(this.ball.body.velocity.x) > 700) {
-                    this.ball.setVelocityX(700 * Math.sign(this.ball.body.velocity.x));
-                }
-                if (Math.abs(this.ball.body.velocity.y) > 700) {
-                    this.ball.setVelocityY(700 * Math.sign(this.ball.body.velocity.y))
-                }
-
-                //Add friction to the ball
-                if (this.ball.body.blocked.down) {
-                    this.ball.setVelocityX(this.ball.body.velocity.x * .7);
-                    this.ball.setVelocityY(this.ball.body.velocity.y * .7);
-                }
-                else if (this.ball.body.blocked.left || this.ball.body.blocked.right) {
-                    this.ball.setVelocityX(this.ball.body.velocity.x * .7);
-                    this.ball.setVelocityY(this.ball.body.velocity.y * .7);
-                }
-                else {
-                    //ball.setVelocityX(ball.body.velocity.x * .9);
-                    //ball.setVelocityY(ball.body.velocity.y * .9);
-                }
+            //Add friction to the ball
+            if(this.ball.body.blocked.down){
+                this.ball.setVelocityX(this.ball.body.velocity.x * .7);
+                this.ball.setVelocityY(this.ball.body.velocity.y * .7);
+            }
+            else if(this.ball.body.blocked.left || this.ball.body.blocked.right){
+                this.ball.setVelocityX(this.ball.body.velocity.x * .7);
+                this.ball.setVelocityY(this.ball.body.velocity.y * .7);
+            }
+            else{
+                //ball.setVelocityX(ball.body.velocity.x * .9);
+                //ball.setVelocityY(ball.body.velocity.y * .9);
+            }
 
                 //Ball will always bounce
                 if (this.ball.body.blocked.down && Math.abs(this.ball.body.velocity.y) < 400) {
@@ -394,17 +385,8 @@
                 }
 
                 //Kick code 
-
-                //Left straight kick
-                if (playerNum === 1 && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && this.keys.A.isDown && ball.getX() - player.getX() <= 0 === true) {
-                    ball.setVelocityX(-90 - (Math.abs(player.getVelocityX())));
-                    player.setLastKickTime(currentTime);
-
-                    //Right straight kick
-                } else if (playerNum === 1 && this.cursors.right.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && this.keys.D.isDown && this.keys.D.isDown && ball.getX() - player.getX() > 0) {
-                    ball.setVelocityX(90 + (Math.abs(player.getVelocityX())));
-                    player.setLastKickTime(currentTime);
-                }
+                //Player should kick when ever the player moves into the ball
+                //If not the Idle Touch code should run
 
                 //Up and left kick
                 if (playerNum === 1 && this.cursors.up.isDown && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && this.keys.W.isDown && this.keys.A.isDown && ball.getX() - player.getX() <= 0) {
@@ -414,37 +396,52 @@
                 }
 
                 //Up and right kick
-                else if (playerNum === 1 && this.cursors.up.isDown && this.cursors.right.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && this.keys.W.isDown && this.keys.D.isDown && ball.getX() - player.getX() <= 0) {
+                else if (playerNum === 1 && this.cursors.up.isDown && this.cursors.right.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && this.keys.W.isDown && this.keys.D.isDown && ball.getX() - player.getX() > 0) {
                     ball.setVelocityY(-700);
                     ball.setVelocityX(90 + (Math.abs(player.getVelocityX())));
                     player.setLastKickTime(currentTime);
                 }
 
-                //Up kick
-                if (playerNum === 1 && this.cursors.up.isDown || playerNum === 2 && this.keys.W.isDown) {
-                    ball.setVelocityY(-700);
-                    player.setLastKickTime(currentTime);
-                }
-
-                if (playerNum === 1 && this.cursors.down.isDown && this.cursors.left.isDown && ball.getY() - player.getY() <= 0 && !player.isTouchingGround() || playerNum === 2 && this.keys.S.isDown && this.keys.A.isDown && ball.getY() - player.getY() <= 0 && !player.isTouchingGround()) {
+                //Down and left kick
+                else if (playerNum === 1 && this.cursors.down.isDown && this.cursors.left.isDown && ball.getY() - player.getY() <= 0 && !player.getSprite().body.blocked.down || playerNum === 2 && this.keys.S.isDown && this.keys.A.isDown && ball.getY() - player.getY() <= 0 && !player.getSprite().body.blocked.down ) {
                     ball.setVelocityY(700);
                     ball.setVelocityX(- 90 - (Math.abs(player.getVelocityX())));
                     player.setLastKickTime(currentTime);
+                    console.log("DOWN LEFT");
                 }
 
                 //Down and right kick
-                else if (playerNum === 1 && this.cursors.down.isDown && this.cursors.right.isDown && ball.getY() - player.getY() <= 0 && !player.isTouchingGround() || playerNum === 2 && this.keys.S.isDown && this.keys.D.isDown && ball.getY() - player.getY() <= 0 && !player.isTouchingGround()) {
+                else if (playerNum === 1 && this.cursors.down.isDown && this.cursors.right.isDown && ball.getY() - player.getY() > 0 && !player.getSprite().body.blocked.down || playerNum === 2 && this.keys.S.isDown && this.keys.D.isDown && ball.getY() - player.getY() > 0 && !player.getSprite().body.blocked.down) {
                     ball.setVelocityY(700);
                     ball.setVelocityX(90 + (Math.abs(player.getVelocityX())));
                     player.setLastKickTime(currentTime);
                 }
 
-                if (playerNum === 1 && this.cursors.down.isDown && !player.isTouchingGround() || playerNum === 2 && this.keys.S.isDown && !player.isTouchingGround()) {
-                    ball.setVelocityY(700);
+                //Left straight kick
+                else if (playerNum === 1 && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && this.keys.A.isDown && ball.getX() - player.getX() <= 0 === true) {
+                    ball.setVelocityX(-90 - (Math.abs(player.getVelocityX())));
+                    player.setLastKickTime(currentTime);
+                } 
+                
+                //Right straight kick
+                else if (playerNum === 1 && this.cursors.right.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && this.keys.D.isDown && this.keys.D.isDown && ball.getX() - player.getX() > 0) {
+                    ball.setVelocityX(90 + (Math.abs(player.getVelocityX()))); 
+                    player.setLastKickTime(currentTime);
+                }
+                
+                //Up kick
+                else if (playerNum === 1 && this.cursors.up.isDown || playerNum === 2 && this.keys.W.isDown) {
+                    ball.setVelocityY(-90 - (Math.abs(player.getVelocityY() * 2)));
                     player.setLastKickTime(currentTime);
                 }
 
+                //Down kick
+                else if (playerNum === 1 && this.cursors.down.isDown && !player.getSprite().body.blocked.down || playerNum === 2 && this.keys.S.isDown && !player.getSprite().body.blocked.down) {
+                    ball.setVelocityY(90 + (Math.abs(player.getVelocityY() * 2)));
+                    player.setLastKickTime(currentTime);
+                }
 
+                //Idle Touch
 
 
             }
