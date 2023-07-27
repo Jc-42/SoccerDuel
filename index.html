@@ -762,7 +762,7 @@ class MoonScene extends Phaser.Scene{
                         this.playerOne.setY(config.height - 99);
                         this.playerTwo.setX(config.width / 4);
                         this.playerTwo.setY(config.height - 99);
-                        this.playerTwoScoreText.setText('Player 2 score: ' + this.playerTwo.score);
+                        this.playerTwoScoreText.setText('' + this.playerTwo.score);
                         //this.sound.play("goal");
                     }
                     return false;
@@ -779,7 +779,7 @@ class MoonScene extends Phaser.Scene{
                         this.playerOne.setY(config.height - 99);
                         this.playerTwo.setX(config.width / 4);
                         this.playerTwo.setY(config.height - 99);
-                        this.playerOneScoreText.setText('Player 1 score: ' + this.playerOne.score);
+                        this.playerOneScoreText.setText('' + this.playerOne.score);
                         //this.sound.play("goal");
                     }
                     return false;
@@ -795,9 +795,9 @@ class MoonScene extends Phaser.Scene{
                 this.cursors = this.input.keyboard.createCursorKeys();
                 this.keys = this.input.keyboard.addKeys('W, A, S, D');
 
-                this.playerOneScoreText = this.add.text(100, 30, 'Player 1 score: 0', { fontSize: '30px', fill: '#000' });
-                this.playerTwoScoreText = this.add.text(config.width / 2 + 150, 30, 'Player 2 score: 0', { fontSize: '30px', fill: '#000' });
-                this.timerText = this.add.text(config.width / 2 - 50 , 30, 'Time: ', {fontSize: '30px', fill: '#000'})
+                this.playerOneScoreText = this.add.text(300, 30, '0', { fontSize: '60px', fill: '#000' });
+                this.playerTwoScoreText = this.add.text(config.width - 300, 30, '0', { fontSize: '60px', fill: '#000' });
+                this.timerText = this.add.text(config.width / 2 - 90 , 20, 'Time: ', {fontSize: '90px', fill: '#000'})
                 
             }
 
