@@ -8,6 +8,24 @@
 <body>
     <script>
     // JPS commit comment
+
+
+    var config = {
+            type: Phaser.AUTO,
+            width: 1152,
+            height: 648,
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 1000 },
+                    //debug: true
+                }
+            },
+            pixelArt: true,
+            roundPixels: true
+        };
+
+        var game = new Phaser.Game(config);
         
     class Player{
         constructor(x, y, scene, n, direction){
@@ -279,6 +297,15 @@
             }
         }
 
+        /*
+        class Powerup()
+        {
+            constructor(x, y, scene)
+            {
+                this.powerup = scene.add.physics(x, y);
+            }
+        }
+        */
 
 
 
@@ -454,47 +481,40 @@
                 this.soccerBall.update();
             }
         }
+
+
+        class PowerUpScene extends BaseScene
+        {
+
+            preload()
+            {
+                super.preload();
+            }
+            create()
+            {
+                super.create();
+                console.log("Wassup JC here")
+            }
+            update()
+            {
+                super.update();
+            }
+        }
+
+        var baseScene = new BaseScene("BaseScene");
+        var powerUpScene = new PowerUpScene("PowerUpScene");
+
+        game.scene.add("BaseScene", baseScene);
+        game.scene.add("PowerUpScene", powerUpScene);
+
+        game.scene.start("PowerUpScene");
     
         
-        var config = {
-            type: Phaser.AUTO,
-            width: 1152,
-            height: 648,
-            physics: {
-                default: 'arcade',
-                arcade: {
-                    gravity: { y: 1000 },
-                    //debug: true
-                }
-            },
-            scene: [BaseScene],
-            pixelArt: true,
-            roundPixels: true
-        };
-
-        var game = new Phaser.Game(config);
-
-
-        /*
-            class PowerUpsMode extends BaseScene
-            {
-                constructor() {
-                    super({key: "PowerupScene"})
-                }
-                preload()
-                {
-                    super.preload();
-                }
-                create()
-                {
         
-                }
-                update()
-                {
         
-                }
-            }
-        */
+        
+        
+
 
 
 
