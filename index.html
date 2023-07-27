@@ -40,9 +40,6 @@
     var scoreText;
     var walls;
 
-    var currTime = 0;
-    var DashTime = 200;
-
     function preload ()
     {
         this.load.image('BlueRight', 'Sprites/Soccer_Blue-1.png');
@@ -173,11 +170,7 @@
         playerOne.update(cursors.up, cursors.left, cursors.down, cursors.right);
         playerTwo.update(keys.W, keys.A, keys.S, keys.D);
         soccerBall.update();  
-        currTime = this.time.now;
     }
-
-
-
         
     class Player{
         constructor(x, y, scene, n){
@@ -196,22 +189,10 @@
             this.num = n;
             
             this.score = 0;
-
-            this.canDash = false;
-            this.startTimer = false;
-            this.numOfClicks;
-            this.LnumOfClicks;
-            this.lastTime;
-            this.counter;
-
         }
-
         
-            
-            
         update(up, left, down, right){
-            
-            
+
             //Slowdown when not pressing anything or pressing oposite movement
             if(left.isDown && right.isDown || !left.isDown && !right.isDown){
 
@@ -222,7 +203,9 @@
                     this.player.setVelocityX(this.player.body.velocity.x * .9);
                 }
 
-            } else if (left.isDown)
+            }
+
+            else if (left.isDown)
             {
                 this.player.setTexture('BlueLeft');
                 //Move slower in the air
@@ -258,96 +241,6 @@
                 this.player.setVelocityX(500 * Math.sign(this.player.body.velocity.x));
             }
             
-
-
-            //Dash code
-
-            right.on('down', function (pointer) {
-                
-                if (this.counter === 1) {
-                    
-
-                    if (this.numOfClicks === 0){
-                        this.numOfClicks = 1;
-                        this.lastTime = currTime;
-                        this.canDash = true;
-                        //console.log("one click!");
-                    } else if (this.numOfClicks === 1 && this.canDash) {
-                        //console.log("Dash!");
-                        this.player.setVelocityX(15000);
-                        this.numOfClicks = 0;
-                        this.lastTime = 0;
-                    } else if (currTime - this.lastTime > DashTime) {
-                        this.numOfClicks = 0;
-                    }
-                    //console.log("click");
-                    //console.log(numOfClicks);
-                    
-                }
-               
-
-                //console.log(currTime);
-                this.counter++;
-                
-                
-                
-                
-            }, this);
-            if (currTime - this.lastTime < DashTime) {
-                //console.log(canDash);
-                this.canDash = true;
-            } else {
-                this.canDash = false;
-                
-            }
-            
-
-            
-
-            if (right.isDown) {
-                this.counter = 0;
-                this.LnumOfClicks = 0;
-            } else if (left.isDown) {
-                this.counter = 0;
-                this.numOfClicks = 0;
-            }
-            /*
-            if (up.isDown) {
-                counter = 0;
-            }*/
-
-            left.on('down', function (pointer) {
-                
-                if (this.counter === 1) {
-                    
-
-                    if (this.LnumOfClicks === 0){
-                        this.LnumOfClicks = 1;
-                        this.lastTime = currTime;
-                        this.canDash = true;
-                        //console.log("left one click!");
-                    } else if (this.LnumOfClicks === 1 && this.canDash) {
-                        //console.log("Dash!");
-                        this.player.setVelocityX(-15000);
-                        this.LnumOfClicks = 0;
-                        this.lastTime = 0;
-                    } else if (currTime - this.lastTime > DashTime) {
-                        this.LnumOfClicks = 0;
-                    }
-                    //console.log("click");
-                    //console.log(numOfClicks);
-                    
-                }
-               
-
-                //console.log(currTime);
-                this.counter++;
-                
-                
-                
-                
-            }, this);
-
             this.kickHitBox.x = this.player.x;
             this.kickHitBox.y = this.player.y;
             this.kickHitBox.setVelocityX(0);
