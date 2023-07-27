@@ -18,7 +18,7 @@
                     default: 'arcade',
                     arcade: {
                         gravity: { y: 1000 },
-                        debug: true
+                        debug: false
                     }
                 },
                 pixelArt: true,
@@ -40,7 +40,7 @@
         this.load.image("settings_button", "mainMenu/settingsButton.png");
         this.load.image("arrow", "mainMenu/arrow.png");
         
-        //this.load.audio("titleMusic", "music/menuTheme.wav");
+        this.load.audio("titleMusic", "music/menuTheme.wav");
         this.load.audio("menuSelect", "music/menuSelect.wav");
         this.load.audio("menuHover", "music/menuHover.wav");
         
@@ -80,9 +80,9 @@
         
         
         this.sound.pauseOnBlur = false
-        //this.sound.play("titleMusic",{
-          //  loop: true
-      //  })
+        /this.sound.play("titleMusic",{
+            loop: true
+        })
         
         //let title = this.add.image(0,0,"Title").setOrigin(0).setDepth(2);
         
@@ -181,31 +181,23 @@ class HomeScene extends Phaser.Scene{
         this.load.image("MapButton", "homeScreen/mapButton.png");
         this.load.image('player_1', 'Sprites/Soccer_Blue-1.png');
         this.load.image('player_2', 'Sprites/Soccer_Blue-2.png');
-        this.load.image("LeftGoal", "tiles/leftGoal.png");
-        this.load.image("RightGoal", "tiles/rightGoal.png");
     }
     
     create(){
         const homeScreen = this.add.image(0,0,"HomeScreen").setOrigin(0);
-        var mapButton = this.add.image(1000,604,"MapButton").setDepth(1);
+        var mapButton = this.add.image(1000,604,"MapButton");
         
-        var player1 = this.add.image(500,500,"player_1");
+        var player1 = this.add.image(200,600,"player_1");
         player1.setScale(9);
-        var player2 = this.add.image(700,500,"player_2");
-        player2.setScale(9);
-        
-        var leftGoal = this.add.image(60,480,"LeftGoal").setDepth(0);
-        leftGoal.setScale(2);
-        var rightGoal = this.add.image(1092,480,"RightGoal").setDepth(0);
-        rightGoal.setScale(2);
+        var player2 = this.add.image(300,600,"player_2");
         
         mapButton.setInteractive();       
         mapButton.on("pointerover",()=>{
             console.log("hover");
- //           hoverSprite.setVisible(true);
+   //         hoverSprite.setVisible(true);
 //            hoverSprite.x = mapButton.x - creditButton.width/1.3;
 //            hoverSprite.y = creditButton.y;
-            this.sound.play("menuHover");  
+            this.sound.play("menuHover");
         })     
         mapButton.on("pointerout",()=>{
             console.log("out");
@@ -214,6 +206,7 @@ class HomeScene extends Phaser.Scene{
         mapButton.on("pointerup",()=>{
             console.log("Open game")
             this.sound.play("menuSelect");
+            this.scene.start("BaseScene");
             this.scene.get('BaseScene').startTime = this.time.now;
             this.scene.start("MapScene");
         })
@@ -336,23 +329,6 @@ class Previews{
     getSprite(){
         return this.preview;
     }
-    
-}
-        
-class MoonScene extends Phaser.Scene{
-
-    preload(){
-        this.load.image("moon_view", "tiles/moonView.png");
-        this.load.image("Moon", "tiles/moon.png");
-    }
-    create(){
-        let moonBg = this.add.image(0,0,"moon_view").setOrigin(0);
-        let moon = this.add.image(0,0,"Moon").setOrigin(0);
-        moonBg.setScale(4);
-        moon.setScale(4);
-        
-    }
-}
         
 
         
@@ -391,7 +367,12 @@ class MoonScene extends Phaser.Scene{
                 }
 
                 else if (left.isDown) {
-                    this.player.setTexture('BlueLeft');
+                    if(this.num === 1){
+                        this.player.setTexture('BlueLeft');
+                    }
+                    else{
+                        this.player.setTexture('RedLeft')
+                    }
                     //Move slower in the air
                     if (!this.player.body.blocked.down) {
                         this.player.setVelocityX(this.player.body.velocity.x - 20);
@@ -403,7 +384,13 @@ class MoonScene extends Phaser.Scene{
 
                 }
                 else if (right.isDown) {
-                    this.player.setTexture('BlueRight');
+                    if(this.num === 1){
+                        this.player.setTexture('BlueRight');
+                    }
+                    else{
+                        this.player.setTexture('RedRight');
+                    }
+                    
 
                     if (!this.player.body.blocked.down) {
                         this.player.setVelocityX(this.player.body.velocity.x + 20);
@@ -684,8 +671,10 @@ class MoonScene extends Phaser.Scene{
 
 
             preload() {
-                this.load.image('BlueRight', 'Sprites/Soccer_Blue-1.png');
-                this.load.image('BlueLeft', 'Sprites/Soccer_Blue-2.png');
+                this.load.image('RedRight', 'Sprites/redRight.png');
+                this.load.image('RedLeft', 'Sprites/redLeft.png');
+                this.load.image('BlueRight', 'Sprites/blueRight.png');
+                this.load.image('BlueLeft', 'Sprites/blueLeft.png');
                 this.load.image('SoccerBall', 'Sprites/Soccer_Ball-1.png');
                 this.load.image('Background', 'Sprites/Background.png');
                 this.load.image('RightGoal', 'Sprites/Right_Goal.png');
@@ -729,7 +718,7 @@ class MoonScene extends Phaser.Scene{
 
                 // Create playerOne instance of Player class
                 this.playerOne = new Player(config.width * .75, 100, this, 1, 'BlueLeft');
-                this.playerTwo = new Player(config.width / 4, 100, this, 2, 'BlueRight');
+                this.playerTwo = new Player(config.width / 4, 100, this, 2, 'RedRight');
                 this.soccerBall = new Ball(config.width / 2, 0, this);
                 this.leftGoal = new Goal(30, 600, 'LeftGoal', this);
                 this.rightGoal = new Goal(config.width - 30, 600, 'RightGoal', this);
@@ -759,7 +748,7 @@ class MoonScene extends Phaser.Scene{
                         this.playerTwo.setX(config.width / 4);
                         this.playerTwo.setY(config.height);
                         this.playerTwoScoreText.setText('Player 2 score: ' + this.playerTwo.score);
-                        this.sound.play("goal");
+                        //this.sound.play("goal");
                     }
                     return false;
                 }, this);
@@ -776,7 +765,7 @@ class MoonScene extends Phaser.Scene{
                         this.playerTwo.setX(config.width / 4);
                         this.playerTwo.setY(config.height);
                         this.playerOneScoreText.setText('Player 1 score: ' + this.playerOne.score);
-                        this.sound.play("goal");
+                        //this.sound.play("goal");
                     }
                     return false;
                 }, this);
