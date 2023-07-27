@@ -5,6 +5,7 @@
 </head>
 <body>
     <script>
+        
     class TitleScene extends Phaser.Scene{
         constructor ()
     {
@@ -163,23 +164,31 @@ class HomeScene extends Phaser.Scene{
         this.load.image("MapButton", "homeScreen/mapButton.png");
         this.load.image('player_1', 'Sprites/Soccer_Blue-1.png');
         this.load.image('player_2', 'Sprites/Soccer_Blue-2.png');
+        this.load.image("LeftGoal", "tiles/leftGoal.png");
+        this.load.image("RightGoal", "tiles/rightGoal.png");
     }
     
     create(){
         const homeScreen = this.add.image(0,0,"HomeScreen").setOrigin(0);
-        var mapButton = this.add.image(1000,604,"MapButton");
+        var mapButton = this.add.image(1000,604,"MapButton").setDepth(1);
         
-        var player1 = this.add.image(200,600,"player_1");
-        player1.set.scale(9);
-        var player2 = this.add.image(300,600,"player_2");
+        var player1 = this.add.image(500,500,"player_1");
+        player1.setScale(9);
+        var player2 = this.add.image(700,500,"player_2");
+        player2.setScale(9);
+        
+        var leftGoal = this.add.image(60,480,"LeftGoal").setDepth(0);
+        leftGoal.setScale(2);
+        var rightGoal = this.add.image(1092,480,"RightGoal").setDepth(0);
+        rightGoal.setScale(2);
         
         mapButton.setInteractive();       
         mapButton.on("pointerover",()=>{
             console.log("hover");
-            hoverSprite.setVisible(true);
+ //           hoverSprite.setVisible(true);
 //            hoverSprite.x = mapButton.x - creditButton.width/1.3;
 //            hoverSprite.y = creditButton.y;
-            this.sound.play("menuHover");
+            this.sound.play("menuHover");  
         })     
         mapButton.on("pointerout",()=>{
             console.log("out");
@@ -188,11 +197,144 @@ class HomeScene extends Phaser.Scene{
         mapButton.on("pointerup",()=>{
             console.log("Open game")
             this.sound.play("menuSelect");
-            this.scene.start("playScene");
+            this.scene.start("mapScene");
         })
         
     } 
     
+}
+     
+    var left;
+    var leftFrame;
+    var middle;
+    var middleFrame;
+    var right;
+    var rightFrame;
+    var i = 0;      
+    var screenShow=[left,middle,right];
+        
+class MapScene extends Phaser.Scene{
+    maps;
+    currentMap = 0;
+    currentImage;
+    displayedImage;
+            
+    constructor (){
+        super ({ key: "mapScene"})
+    }
+    preload(){
+        this.load.image("right_click", "maps/Right_click.png");
+        this.load.image("left_click", "maps/Left_click.png");
+        this.load.image("default_preview","maps/Default_preview.png");
+        this.load.image("moon_preview", "maps/moon_preview.png");
+        this.load.image("yellow_bg", "maps/yellow_bg.png");
+        }
+        
+    create(){
+        let rightClick = this.add.image(1052,this.game.renderer.height/2,"right_click");
+        rightClick.setScale(0.1).setDepth(1);
+        let leftClick = this.add.image(100,this.game.renderer.height/2, "left_click");
+        leftClick.setScale(0.1).setDepth(1);
+        this.add.image(0, 0, "yellow_bg").setOrigin(0).setDepth(0);
+
+        
+        
+        this.maps = ["default_preview", "moon_preview"];
+        this.currentImage = this.maps[this.currentMap];
+        
+        this.displayedImage = this.add.image(this.game.renderer.width/2,
+                                             this.game.renderer.height/2,
+                                             this.currentImage).setScale(0.6);
+        
+        this.displayedImage.setInteractive();
+        rightClick.on("pointerover",()=>{
+            console.log("hover");
+        })   
+        this.displayedImage.on("pointerup",()=>{
+            this.sound.play("menuSelect");
+            if (this.currentImage === "default_preview"){
+                this.scene.start("playScene");
+            }
+            else if(this.currentImage === "moon_preview"){
+                this.scene.start("moonScene");
+            }
+        })
+        
+        
+        rightClick.setInteractive();       
+        rightClick.on("pointerover",()=>{
+            console.log("hover");
+        })     
+//        rightClick.on("pointerout",()=>{
+//            console.log("out");
+//        })        
+        rightClick.on("pointerup",()=>{
+            this.sound.play("menuSelect");
+            if (this.currentMap >= this.maps.length-1) {
+                this.currentMap = 0;
+            } else {
+                this.currentMap++;
+            }
+            
+            this.currentImage = this.maps[this.currentMap];
+            this.displayedImage.setTexture(this.currentImage);
+                //= this.add.image(this.game.renderer.width/2, 
+                //                                 this.game.renderer.height/2, 
+                //                                 this.currentImage).setScale(0.4);
+            
+//            console.log("Open game")
+//            this.sound.play("menuSelect");
+//            i++;
+   //         this.scene.start("mapScene");
+        })
+        
+        
+        
+        leftClick.setInteractive();       
+        leftClick.on("pointerover",()=>{
+            console.log("hover");
+        })        
+        leftClick.on("pointerup",()=>{
+            console.log("Open game")
+            this.sound.play("menuSelect");
+            if (this.currentMap <= 0) {
+                this.currentMap = this.maps.length-1;
+            } else {
+                this.currentMap--;
+            }
+            
+            this.currentImage = this.maps[this.currentMap];
+            this.displayedImage.setTexture(this.currentImage);
+        })
+        
+    }
+}
+
+class Previews{
+    constructor(x,y,frame){
+    this.preview = scene.physics.add.image(x, y, frame);        
+    }
+    getSprite(){
+        return this.preview;
+    }
+    
+}
+        
+class MoonScene extends Phaser.Scene{
+    constructor () {
+        super ({ key: "moonScene"});
+    }
+    preload(){
+        this.load.image("moon_view", "tiles/moonView.png");
+        this.load.image("Moon", "tiles/moon.png");
+    }
+    create(){
+        let moonBg = this.add.image(0,0,"moon_view").setOrigin(0);
+        let moon = this.add.image(0,0,"Moon").setOrigin(0);
+        moonBg.setScale(4);
+        moon.setScale(4);
+        
+    }
 }
 
 class PlayScene extends Phaser.Scene{
@@ -583,7 +725,7 @@ var config = {
                 debug: true
             }
         },
-        scene: [TitleScene, PlayScene, HomeScene],
+        scene: [TitleScene, PlayScene,MapScene, HomeScene, MoonScene],
     /*{
 //            preload: preload,
 //            create: create,
