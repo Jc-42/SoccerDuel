@@ -21,6 +21,11 @@
                         debug: false
                     }
                 },
+                scale: 
+                {
+                    mode: Phaser.Scale.FIT,
+                    autoCenter: Phaser.Scale.CENTER_BOTH,
+                },
                 pixelArt: true,
                 roundPixels: true
                 
@@ -179,42 +184,45 @@ class HomeScene extends Phaser.Scene{
     preload(){
         this.load.image("HomeScreen", "homeScreen/home_bg.png");
         this.load.image("MapButton", "homeScreen/mapButton.png");
-        this.load.image('player_1', 'Sprites/Soccer_Blue-1.png');
-        this.load.image('player_2', 'Sprites/Soccer_Blue-2.png');
+        this.load.image('player_1', 'Sprites/blueRight.png');
+        this.load.image('player_2', 'Sprites/redLeft.png');
         this.load.image("LeftGoal", "tiles/leftGoal.png");
         this.load.image("RightGoal", "tiles/rightGoal.png");
+        this.load.image("arrow", "mainMenu/arrow.png");
+        this.load.audio("menuHover", "music/menuHover.wav");
     }
     
     create(){
         const homeScreen = this.add.image(0,0,"HomeScreen").setOrigin(0);
         var mapButton = this.add.image(1000,604,"MapButton").setDepth(1);
         
-        var player1 = this.add.image(500,500,"player_1");
+        var player1 = this.add.image(config.width / 2 - 100,500,"player_1");
         player1.setScale(9);
-        var player2 = this.add.image(700,500,"player_2");
+        var player2 = this.add.image(config.width / 2 + 100,500,"player_2");
         player2.setScale(9);
         
         var leftGoal = this.add.image(60,480,"LeftGoal").setDepth(0);
         leftGoal.setScale(2);
         var rightGoal = this.add.image(1092,480,"RightGoal").setDepth(0);
         rightGoal.setScale(2);
+
+        let hoverSprite = this.add.sprite(mapButton.x - mapButton.width / 1.5,604,"arrow").setDepth(3);
+        hoverSprite.setScale(0.1);
+        hoverSprite.setVisible(false);
         
         mapButton.setInteractive();       
         mapButton.on("pointerover",()=>{
             console.log("hover");
- //           hoverSprite.setVisible(true);
-//            hoverSprite.x = mapButton.x - creditButton.width/1.3;
-//            hoverSprite.y = creditButton.y;
+            hoverSprite.setVisible(true);
             this.sound.play("menuHover");  
         })     
         mapButton.on("pointerout",()=>{
             console.log("out");
-   //         hoverSprite.setVisible(false);
+            hoverSprite.setVisible(false);
         })        
         mapButton.on("pointerup",()=>{
             console.log("Open game")
             this.sound.play("menuSelect");
-            this.scene.get('BaseScene').startTime = this.time.now;
             this.scene.start("MapScene");
         })
         
@@ -269,6 +277,7 @@ class MapScene extends Phaser.Scene{
             this.sound.play("menuSelect");
             if (this.currentImage === "default_preview"){
                 this.scene.start("BaseScene");
+                this.scene.get('BaseScene').startTime = this.time.now;
             }
             else if(this.currentImage === "moon_preview"){
                 this.scene.start("MoonScene");
@@ -721,7 +730,6 @@ class MoonScene extends Phaser.Scene{
                 const sky = this.map.createLayer("Tile Layer 4", tileset);
                 const landscape = this.map.createLayer("Tile Layer 2", tileset);
                 const flowers = this.map.createLayer("Tile Layer 3", tileset);
-                const hoverButton = this.scene.get('TitleScene').hoverSprite;
                 
                 //hoverSprite.setVisible(false);
                 
@@ -741,8 +749,8 @@ class MoonScene extends Phaser.Scene{
                 this.playerOne = new Player(config.width * .75, 100, this, 1, 'RedLeft');
                 this.playerTwo = new Player(config.width / 4, 100, this, 2, 'BlueRight');
                 this.soccerBall = new Ball(config.width / 2, 0, this);
-                this.leftGoal = new Goal(30, 600, 'LeftGoal', this);
-                this.rightGoal = new Goal(config.width - 30, 600, 'RightGoal', this);
+                this.leftGoal = new Goal(30, 577, 'LeftGoal', this);
+                this.rightGoal = new Goal(config.width - 30, 577, 'RightGoal', this);
                 this.walls = [];
                 this.gameOver = false;
 
@@ -801,9 +809,9 @@ class MoonScene extends Phaser.Scene{
                 this.cursors = this.input.keyboard.createCursorKeys();
                 this.keys = this.input.keyboard.addKeys('W, A, S, D');
 
-                this.playerOneScoreText = this.add.text(100, 30, 'Player 1 score: 0', { fontSize: '25px', fill: '#000' });
-                this.playerTwoScoreText = this.add.text(config.width / 2 + 100, 30, 'Player 2 score: 0', { fontSize: '25px', fill: '#000' });
-                this.timerText = this.add.text(config.width / 2 - 50 , 30, 'Time: ', {fontSize: '25px', fill: '#000'})
+                this.playerOneScoreText = this.add.text(100, 30, 'Player 1 score: 0', { fontSize: '30px', fill: '#000' });
+                this.playerTwoScoreText = this.add.text(config.width / 2 + 150, 30, 'Player 2 score: 0', { fontSize: '30px', fill: '#000' });
+                this.timerText = this.add.text(config.width / 2 - 50 , 30, 'Time: ', {fontSize: '30px', fill: '#000'})
                 
             }
 
@@ -908,11 +916,11 @@ class MoonScene extends Phaser.Scene{
                     this.timerText.setText('0:00');
                     if (this.playerOne.score > this.playerTwo.score)
                     {
-                        this.gameOverText = this.add.text(config.width / 2 - 120, 100, 'Player 1 Wins!', { fontSize: '40px', fill: '#000' })
+                        this.gameOverText = this.add.text(config.width / 2 - 160, 100, 'Player 1 Wins!', { fontSize: '40px', fill: '#000' })
                     }
                     else if (this.playerTwo.score > this.playerOne.score)
                     {
-                        this.gameOverText = this.add.text(config.width / 2 - 120, 100, 'Player 2 Wins!', { fontSize: '40px', fill: '#000' })
+                        this.gameOverText = this.add.text(config.width / 2 - 160, 100, 'Player 2 Wins!', { fontSize: '40px', fill: '#000' })
                     }
                     else
                     {
