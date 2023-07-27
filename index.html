@@ -345,107 +345,106 @@ class PlayScene extends Phaser.Scene{
         
 
         
-    class Player{
-        constructor(x, y, scene, n, direction){
-            this.player = scene.physics.add.sprite(x, y, direction);
-            this.player.setVelocity(0, 0);
-            this.player.setBounce(0, 0);
-            this.player.setCollideWorldBounds(true);
-            this.player.setScale(3.4);
-            this.player.body.setSize(9, 24, 4.5, 12);
-                                
-            this.kickHitBox = scene.physics.add.sprite(this.player.x, this.player.y, null);
-            this.kickHitBox.setVisible(false); // Make the hitbox invisible
-            this.kickHitBox.setSize(50, 50); // Set the size of the hitbox
-            this.kickHitBox.setVelocity(0, 0); // Set the velocity of the hitbox
+    class Player extends Phaser.Physics.Arcade.Sprite{
+        constructor(x, y, scene, n, direction, spritesheet, animations){
+
+            super(scene, x, y, spritesheet);
+            this.animations = animations;
+            scene.add.existing(this);
+            scene.physics.add.existing(this);
+
+
+            this.setVelocity(0, 0);
+            this.setBounce(0, 0);
+            this.setCollideWorldBounds(true);
+            this.setScale(3.4);
+            //this.body.setSize(9, 24, 4.5, 12);
+            this.setBodySize(10, 20, true);
             this.lastKickTime = 0;
             this.num = n;
 
             this.score = 0;
-        //    this.physics.collide(this.player,this.ground);
+        //    this.physics.collide(this,this.ground);
         }
         
         update(up, left, down, right){
 
-                //Slowdown when not pressing anything or pressing oposite movement
+            //Slowdown when not pressing anything or pressing oposite movement
                 if (left.isDown && right.isDown || !left.isDown && !right.isDown) {
 
-                    if (this.player.body.blocked.down) {
-                        this.player.setVelocityX(this.player.body.velocity.x * .7);
+                    if (this.body.blocked.down) {
+                        this.setVelocityX(this.body.velocity.x * .7);
                     }
                     else {
-                        this.player.setVelocityX(this.player.body.velocity.x * .9);
+                        this.setVelocityX(this.body.velocity.x * .9);
                     }
 
                 }
 
                 else if (left.isDown) {
-                    this.player.setTexture('BlueLeft');
+                    //Add amiations
+
                     //Move slower in the air
-                    if (!this.player.body.blocked.down) {
-                        this.player.setVelocityX(this.player.body.velocity.x - 20);
+                    if (!this.body.blocked.down) {
+                        this.setVelocityX(this.body.velocity.x - 20);
                     }
                     else {
-                        this.player.setVelocityX(this.player.body.velocity.x - 70);
+                        this.setVelocityX(this.body.velocity.x - 70);
                     }
 
 
                 }
                 else if (right.isDown) {
-                    this.player.setTexture('BlueRight');
+                    //add animations
 
-                    if (!this.player.body.blocked.down) {
-                        this.player.setVelocityX(this.player.body.velocity.x + 20);
+                    if (!this.body.blocked.down) {
+                        this.setVelocityX(this.body.velocity.x + 20);
                     }
                     else {
-                        this.player.setVelocityX(this.player.body.velocity.x + 70);
+                        this.setVelocityX(this.body.velocity.x + 70);
                     }
                 }
 
                 //Jump
-                if (up.isDown && this.player.body.blocked.down) {
-                    this.player.setVelocityY(-500)
+                if (up.isDown && this.body.blocked.down) {
+                    this.setVelocityY(-500)
                 }
 
 
             //Max horizontal speed
-            if(Math.abs(this.player.body.velocity.x) > 500){
-                this.player.setVelocityX(500 * Math.sign(this.player.body.velocity.x));
+            if(Math.abs(this.body.velocity.x) > 500){
+                this.setVelocityX(500 * Math.sign(this.body.velocity.x));
             }
-            this.kickHitBox.x = this.player.x;
-            this.kickHitBox.y = this.player.y;
-            this.kickHitBox.setVelocityX(0);
-            this.kickHitBox.setVelocityY(0);
 
         
         }
         
         getSprite(){
-            return this.player;
+            return this;
         }
         
         getX(){
-            return this.player.x;
+            return this.x;
         }
         
         getY(){
-            return this.player.y;
+            return this.y;
         }
         
         getVelocityX(){
-            return this.player.body.velocity.x;
+            return this.body.velocity.x;
         }
         
         getVelocityY(){
-            return this.player.body.velocity.y;
+            return this.body.velocity.y;
         }
         
         getWidth(){
-            return this.player.body.width;
+            return this.body.width;
         }
         
         getHeight(){
-            return this.player.body.height;
+            return this.body.height;
         }
 
             getLastKickTime() {
@@ -453,11 +452,11 @@ class PlayScene extends Phaser.Scene{
             }
 
             getHeight() {
-                return this.player.body.height;
+                return this.body.height;
             }
 
             getWidth() {
-                return this.player.body.height;
+                return this.body.height;
             }
 
             setLastKickTime(n) {
@@ -469,11 +468,11 @@ class PlayScene extends Phaser.Scene{
             }
 
             setX(n) {
-                this.player.x = n;
+                this.x = n;
             }
 
         setY(n){
-            this.player.y = n;
+            this.y = n;
         }
         
         
@@ -653,6 +652,9 @@ class PlayScene extends Phaser.Scene{
 
 
 
+        var playerAnimations = {};
+        var player2Animations = {};
+
         class BaseScene extends Phaser.Scene {
 
             soccerBall;
@@ -669,6 +671,8 @@ class PlayScene extends Phaser.Scene{
 
             startTime;
 
+            
+
 
             preload() {
                 this.load.image('BlueRight', 'Sprites/Soccer_Blue-1.png');
@@ -680,6 +684,9 @@ class PlayScene extends Phaser.Scene{
                 this.load.image("tiles", "tiles/tilesheet_complete.png");
                 this.load.tilemapTiledJSON("grassyField", "tiles/defaultField.tmj");
 
+
+                this.load.atlas('player', 'Sprites/player000.png', 'Sprites/spritesheet1.json');
+                this.load.atlas('player2', 'Sprites/player100.png', 'Sprites/spritesheet2.json');
             }
 
             create() {
@@ -694,6 +701,24 @@ class PlayScene extends Phaser.Scene{
                 
                 //this.explosion = this.add.sprite(0, 0, 'boom').setVisible(false);
 
+
+                //Player one animations
+                
+                var idle = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var righta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var lefta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                playerAnimations['idle'] = idle;
+                playerAnimations['right'] = righta;
+                playerAnimations['left'] = lefta;
+
+
+                //Player two animations
+                var idle2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var righta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var lefta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                player2Animations['idle'] = idle2;
+                player2Animations['right'] = righta2;
+                player2Animations['left'] = lefta2;
                 
                 this.ground.setCollision(201);
                 
@@ -703,8 +728,8 @@ class PlayScene extends Phaser.Scene{
 
 
                 // Create playerOne instance of Player class
-                this.playerOne = new Player(config.width * .75, 100, this, 1, 'BlueLeft');
-                this.playerTwo = new Player(config.width / 4, 100, this, 2, 'BlueRight');
+                this.playerOne = new Player(config.width * .75, 100, this, 1, 'player', playerAnimations);
+                this.playerTwo = new Player(config.width / 4, 100, this, 2, 'player', player2Animations);
                 this.soccerBall = new Ball(config.width / 2, 0, this);
                 this.leftGoal = new Goal(30, 600, 'LeftGoal', this);
                 this.rightGoal = new Goal(config.width - 30, 600, 'RightGoal', this);
@@ -712,6 +737,8 @@ class PlayScene extends Phaser.Scene{
                 this.startTime = this.time.now;
                 this.gameOver = false;
 
+                this.playerOne.play(playerAnimations['idle']);
+                this.playerTwo.play(player2Animations['idle']);
                 //Ball collsion with player one
                 this.physics.add.collider(this.playerOne.getSprite(), this.soccerBall.getSprite(), function (player, ball) { }, function (player, ball) {this.calculateCollision(this.playerOne, this.soccerBall, 1, this); return false; }, this);
 
@@ -819,6 +846,7 @@ class PlayScene extends Phaser.Scene{
                 else if (playerNum === 1 && this.cursors.right.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && this.keys.D.isDown && this.keys.D.isDown && ball.getX() - player.getX() > 0) {
                     ball.setVelocityX(90 + (Math.abs(player.getVelocityX()))); 
                     player.setLastKickTime(currentTime);
+                    console.log("kicked right");
                 }
                 
                 //Up kick
@@ -858,7 +886,35 @@ class PlayScene extends Phaser.Scene{
                     this.timerText.setText('0:00');
                 }
                 
+
+                //Set up animation controls
                 
+                if (this.cursors.left.isDown)
+                {
+                    this.playerOne.play(playerAnimations['left'], true);
+                    //console.log("p1 left");
+                } else if (this.cursors.right.isDown)
+                {
+                    this.playerOne.play(playerAnimations['right'], true);
+                    //console.log("p1 right");
+                } else 
+                {
+                    this.playerOne.play(playerAnimations['idle'], true);
+                    
+                }
+                
+                if (this.keys.A.isDown)
+                {
+                    this.playerTwo.play(player2Animations['left'], true);
+                    //console.log("p2 left");
+                } else if (this.keys.D.isDown)
+                {
+                    this.playerTwo.play(player2Animations['right'], true);
+                    //console.log("p2 right");
+                } else 
+                {
+                    this.playerTwo.play(player2Animations['idle'], true);
+                }
                 
             }
         }
