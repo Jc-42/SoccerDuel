@@ -40,7 +40,7 @@
         this.load.image("settings_button", "mainMenu/settingsButton.png");
         this.load.image("arrow", "mainMenu/arrow.png");
         
-        //this.load.audio("titleMusic", "music/menuTheme.wav");
+        this.load.audio("titleMusic", "music/menuTheme.wav");
         this.load.audio("menuSelect", "music/menuSelect.wav");
         this.load.audio("menuHover", "music/menuHover.wav");
         
@@ -80,9 +80,9 @@
         
         
         this.sound.pauseOnBlur = false
-        //this.sound.play("titleMusic",{
-          //  loop: true
-      //  })
+        /this.sound.play("titleMusic",{
+            loop: true
+        })
         
         //let title = this.add.image(0,0,"Title").setOrigin(0).setDepth(2);
         
@@ -670,7 +670,7 @@ class HomeScene extends Phaser.Scene{
                         this.playerTwo.setX(config.width / 4);
                         this.playerTwo.setY(config.height);
                         this.playerTwoScoreText.setText('Player 2 score: ' + this.playerTwo.score);
-                        this.sound.play("goal");
+                        //this.sound.play("goal");
                     }
                     return false;
                 }, this);
@@ -687,7 +687,7 @@ class HomeScene extends Phaser.Scene{
                         this.playerTwo.setX(config.width / 4);
                         this.playerTwo.setY(config.height);
                         this.playerOneScoreText.setText('Player 1 score: ' + this.playerOne.score);
-                        this.sound.play("goal");
+                        //this.sound.play("goal");
                     }
                     return false;
                 }, this);
