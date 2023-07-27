@@ -215,7 +215,7 @@ class HomeScene extends Phaser.Scene{
             console.log("Open game")
             this.sound.play("menuSelect");
             this.scene.get('BaseScene').startTime = this.time.now;
-            this.scene.start("mapScene");
+            this.scene.start("MapScene");
         })
         
     } 
@@ -268,10 +268,10 @@ class MapScene extends Phaser.Scene{
         this.displayedImage.on("pointerup",()=>{
             this.sound.play("menuSelect");
             if (this.currentImage === "default_preview"){
-                this.scene.start("baseScene");
+                this.scene.start("BaseScene");
             }
             else if(this.currentImage === "moon_preview"){
-                this.scene.start("moonScene");
+                this.scene.start("MoonScene");
             }
         })
         
@@ -898,11 +898,11 @@ class MoonScene extends Phaser.Scene{
                     this.timerText.setText('0:00');
                     if (this.playerOne.score > this.playerTwo.score)
                     {
-                        this.gameOverText = this.add.text(config.width / 2 - 135, 100, 'Player 1 Wins!', { fontSize: '40px', fill: '#000' })
+                        this.gameOverText = this.add.text(config.width / 2 - 120, 100, 'Player 1 Wins!', { fontSize: '40px', fill: '#000' })
                     }
                     else if (this.playerTwo.score > this.playerOne.score)
                     {
-                        this.gameOverText = this.add.text(config.width / 2 - 135, 100, 'Player 2 Wins!', { fontSize: '40px', fill: '#000' })
+                        this.gameOverText = this.add.text(config.width / 2 - 120, 100, 'Player 2 Wins!', { fontSize: '40px', fill: '#000' })
                     }
                     else
                     {
