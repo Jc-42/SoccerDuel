@@ -48,6 +48,10 @@
         this.load.image('Background', 'Sprites/Background.png');
         this.load.image('RightGoal', 'Sprites/Right_Goal.png');
         this.load.image('LeftGoal', 'Sprites/Left_Goal.png');
+
+
+        this.load.atlas('player', 'Sprites/player000.png', 'Sprites/spritesheet1.json');
+        //this.load.atlas('seacreatures', 'assets/seacreatures_json.png', 'assets/seacreatures_json.json');
         
     }
 
@@ -65,6 +69,15 @@
         leftGoal = new Goal(30, 600, 'LeftGoal', this);
         rightGoal = new Goal(config.width - 30, 600, 'RightGoal', this);
         walls = [];
+
+
+        //Set up animations
+        
+        let playerAnimations = {};
+        var idle = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+        playerAnimations['idle'] = idle;
+        //layer.play(player.animations['idle']);
+        
 
         //Ball collsion with player one
         this.physics.add.collider(playerOne.getSprite(), soccerBall.getSprite(), function(player, ball) {}, function(player, ball) {calculateCollision(playerOne, soccerBall, 1, this); return false;}, this);
@@ -165,7 +178,7 @@
     
     function update ()
     {   
-        console.log("Score: " + playerOne.score + " Score: " + playerTwo.score);
+        //console.log("Score: " + playerOne.score + " Score: " + playerTwo.score);
         //Movment & Controls
         playerOne.update(cursors.up, cursors.left, cursors.down, cursors.right);
         playerTwo.update(keys.W, keys.A, keys.S, keys.D);
