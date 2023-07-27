@@ -296,6 +296,8 @@
             scoreText;
             walls;
 
+            startTime;
+
 
             preload() {
                 this.load.image('BlueRight', 'Sprites/Soccer_Blue-1.png');
@@ -320,6 +322,8 @@
                 this.leftGoal = new Goal(30, 600, 'LeftGoal', this);
                 this.rightGoal = new Goal(config.width - 30, 600, 'RightGoal', this);
                 this.walls = [];
+                this.startTime = this.time.now;
+                this.gameOver = false;
 
                 //Ball collsion with player one
                 this.physics.add.collider(this.playerOne.getSprite(), this.soccerBall.getSprite(), function (player, ball) { }, function (player, ball) {this.calculateCollision(this.playerOne, this.soccerBall, 1, this); return false; }, this);
@@ -367,11 +371,12 @@
                     this.physics.add.collider(soccerBall.getSprite(), walls[i].getSprite());
                 }
 
-                    this.cursors = this.input.keyboard.createCursorKeys();
-                    this.keys = this.input.keyboard.addKeys('W, A, S, D');
+                this.cursors = this.input.keyboard.createCursorKeys();
+                this.keys = this.input.keyboard.addKeys('W, A, S, D');
 
-                    this.playerOneScoreText = this.add.text(100, 30, 'Player 1 score: 0', { fontSize: '25px', fill: '#000' });
-                    this.playerTwoScoreText = this.add.text(config.width / 2 + 100, 30, 'Player 2 score: 0', { fontSize: '25px', fill: '#000' });
+                this.playerOneScoreText = this.add.text(100, 30, 'Player 1 score: 0', { fontSize: '25px', fill: '#000' });
+                this.playerTwoScoreText = this.add.text(config.width / 2 + 100, 30, 'Player 2 score: 0', { fontSize: '25px', fill: '#000' });
+                this.timerText = this.add.text(config.width / 2 - 50 , 30, 'Time: ', {fontSize: '25px', fill: '#000'})
             }
 
 
@@ -452,6 +457,22 @@
                 this.playerOne.update(this.cursors.up, this.cursors.left, this.cursors.down, this.cursors.right);
                 this.playerTwo.update(this.keys.W, this.keys.A, this.keys.S, this.keys.D);
                 this.soccerBall.update();
+
+                //Update timer to count down from 2:00 to 0
+                let newTime = parseInt((121000 - (this.time.now - this.startTime)) / 1000);
+
+                if(newTime % 60 <= 9 && newTime % 60 >= 0){
+                    this.timerText.setText(parseInt(newTime / 60) + ':0' + newTime % 60);
+                }
+                else if (newTime % 60 > 9 && newTime >= 0){
+                    this.timerText.setText(parseInt(newTime / 60) + ':' + newTime % 60);
+                }
+                else{
+                    this.timerText.setText('0:00');
+                }
+                
+                
+                
             }
         }
     
