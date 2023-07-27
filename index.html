@@ -40,7 +40,7 @@
         this.load.image("settings_button", "mainMenu/settingsButton.png");
         this.load.image("arrow", "mainMenu/arrow.png");
         
-        this.load.audio("titleMusic", "music/menuTheme.wav");
+        //this.load.audio("titleMusic", "music/menuTheme.wav");
         this.load.audio("menuSelect", "music/menuSelect.wav");
         this.load.audio("menuHover", "music/menuHover.wav");
         
@@ -76,13 +76,13 @@
         let settingButton = this.add.image(this.game.renderer.width/1.55,
                        450,"settings_button").setDepth(2);
         let playButton = this.add.image(this.game.renderer.width/2,
-                    285,"play_button").setDepth(2);  
+                        285,"play_button").setDepth(2);  
         
         
         this.sound.pauseOnBlur = false
-        this.sound.play("titleMusic",{
-            loop: true
-        })
+        //this.sound.play("titleMusic",{
+          //  loop: true
+      //  })
         
         //let title = this.add.image(0,0,"Title").setOrigin(0).setDepth(2);
         
@@ -308,29 +308,6 @@ class PlayScene extends Phaser.Scene{
     }
 
  
-
-    function calculateCollision(player, ball, playerNum, scene) {
-        let currentTime = scene.time.now;
-        // Check if enough time has passed since the last kick
-        if (currentTime - player.getLastKickTime() < 200) {
-            // If not, return immediately without kicking
-            return;
-        }
-
-        //Kick code
-        if (playerNum === 1 && cursors.left.isDown && cursors.down.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && keys.A.isDown && keys.S.isDown && ball.getX() - player.getX() <= 0) {
-            ball.setVelocityX(ball.getVelocityX() - 90 - (Math.abs(player.getVelocityX())));
-            player.setLastKickTime(currentTime);
-        } else if (playerNum === 1 && cursors.right.isDown && cursors.down.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && keys.D.isDown && keys.S.isDown && ball.getX() - player.getX() > 0) {
-            ball.setVelocityX(ball.getVelocityX() + 90 + (Math.abs(player.getVelocityX())));
-            player.setLastKickTime(currentTime);
-        }
-        
-        if (playerNum === 1 && cursors.up.isDown && cursors.down.isDown || playerNum === 2 && keys.W.isDown && keys.S.isDown) {
-            ball.setVelocityY(-700);
-            player.setLastKickTime(currentTime);
-        }
-    }
     function update ()
     {   
         
@@ -680,6 +657,9 @@ class PlayScene extends Phaser.Scene{
                 this.load.image("tiles", "tiles/tilesheet_complete.png");
                 this.load.tilemapTiledJSON("grassyField", "tiles/defaultField.tmj");
 
+                this.load.audio("kick", "sfx/Kick.wav");
+                this.load.audio("goal", "sfx/Goal.wav")
+
             }
 
             create() {
@@ -731,6 +711,7 @@ class PlayScene extends Phaser.Scene{
                         this.playerTwo.setX(config.width / 4);
                         this.playerTwo.setY(config.height);
                         this.playerTwoScoreText.setText('Player 2 score: ' + this.playerTwo.score);
+                        this.sound.play("goal");
                     }
                     return false;
                 }, this);
@@ -747,6 +728,7 @@ class PlayScene extends Phaser.Scene{
                         this.playerTwo.setX(config.width / 4);
                         this.playerTwo.setY(config.height);
                         this.playerOneScoreText.setText('Player 1 score: ' + this.playerOne.score);
+                        this.sound.play("goal");
                     }
                     return false;
                 }, this);
@@ -779,12 +761,14 @@ class PlayScene extends Phaser.Scene{
                 //Kick code 
                 //Player should kick when ever the player moves into the ball
                 //If not the Idle Touch code should run
+                
 
                 //Up and left kick
                 if (playerNum === 1 && this.cursors.up.isDown && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && this.keys.W.isDown && this.keys.A.isDown && ball.getX() - player.getX() <= 0) {
                     ball.setVelocityY(-700);
                     ball.setVelocityX(- 90 - (Math.abs(player.getVelocityX())));
                     player.setLastKickTime(currentTime);
+                    this.sound.play("kick");
                 }
 
                 //Up and right kick
@@ -792,6 +776,7 @@ class PlayScene extends Phaser.Scene{
                     ball.setVelocityY(-700);
                     ball.setVelocityX(90 + (Math.abs(player.getVelocityX())));
                     player.setLastKickTime(currentTime);
+                    this.sound.play("kick");
                 }
 
                 //Down and left kick
@@ -800,6 +785,7 @@ class PlayScene extends Phaser.Scene{
                     ball.setVelocityX(- 90 - (Math.abs(player.getVelocityX())));
                     player.setLastKickTime(currentTime);
                     console.log("DOWN LEFT");
+                    this.sound.play("kick");
                 }
 
                 //Down and right kick
@@ -807,30 +793,35 @@ class PlayScene extends Phaser.Scene{
                     ball.setVelocityY(700);
                     ball.setVelocityX(90 + (Math.abs(player.getVelocityX())));
                     player.setLastKickTime(currentTime);
+                    this.sound.play("kick");
                 }
 
                 //Left straight kick
                 else if (playerNum === 1 && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && this.keys.A.isDown && ball.getX() - player.getX() <= 0 === true) {
                     ball.setVelocityX(-90 - (Math.abs(player.getVelocityX())));
                     player.setLastKickTime(currentTime);
+                    this.sound.play("kick");
                 } 
                 
                 //Right straight kick
                 else if (playerNum === 1 && this.cursors.right.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && this.keys.D.isDown && this.keys.D.isDown && ball.getX() - player.getX() > 0) {
                     ball.setVelocityX(90 + (Math.abs(player.getVelocityX()))); 
                     player.setLastKickTime(currentTime);
+                    this.sound.play("kick");
                 }
                 
                 //Up kick
                 else if (playerNum === 1 && this.cursors.up.isDown || playerNum === 2 && this.keys.W.isDown) {
                     ball.setVelocityY(-90 - (Math.abs(player.getVelocityY() * 2)));
                     player.setLastKickTime(currentTime);
+                    this.sound.play("kick");
                 }
 
                 //Down kick
                 else if (playerNum === 1 && this.cursors.down.isDown && !player.getSprite().body.blocked.down || playerNum === 2 && this.keys.S.isDown && !player.getSprite().body.blocked.down) {
                     ball.setVelocityY(90 + (Math.abs(player.getVelocityY() * 2)));
                     player.setLastKickTime(currentTime);
+                    this.sound.play("kick");
                 }
 
                 //Idle Touch
