@@ -630,11 +630,11 @@ class MoonScene extends Phaser.Scene{
         constructor(x, y, sprite, scene) {
             this.goal = scene.physics.add.sprite(x, y, sprite);
             this.goal.body.setAllowGravity(false);
-            this.goal.setScale(1);
+            this.goal.setScale(1.4);
 
             // Create the top collider
-            this.topCollider = scene.physics.add.staticSprite(x, y - this.goal.body.height / 2, null);
-            this.topCollider.body.setSize(this.goal.body.width, 1);
+            this.topCollider = scene.physics.add.staticSprite(x, y - this.goal.body.height * 1.4 / 2 - 2, null);
+            this.topCollider.body.setSize(this.goal.body.width * 1.4, 1);
             this.topCollider.setVisible(false);
         }
 
@@ -787,8 +787,8 @@ class MoonScene extends Phaser.Scene{
                 this.playerOne = new Player(config.width * .75, 100, this, 1, 'RedLeft');
                 this.playerTwo = new Player(config.width / 4, 100, this, 2, 'BlueRight');
                 this.soccerBall = new Ball(config.width / 2, 0, this);
-                this.leftGoal = new Goal(30, 577, 'LeftGoal', this);
-                this.rightGoal = new Goal(config.width - 30, 577, 'RightGoal', this);
+                this.leftGoal = new Goal(30, 553, 'LeftGoal', this);
+                this.rightGoal = new Goal(config.width - 30, 553, 'RightGoal', this);
                 this.walls = [];
                 this.gameOver = false;
 
