@@ -1019,7 +1019,8 @@ class MoonScene extends Phaser.Scene{
                     {
                         this.gameOverText = this.add.text(config.width / 2 - 135, 100, "It's a tie!", { fontSize: '40px', fill: '#000' })
                     }
-
+                    
+                    this.sound.stopByKey("titleMusic");
                     this.playerOne.getSprite().disableBody(true, false);
                     this.playerTwo.getSprite().disableBody(true, false);
                     this.soccerBall.getSprite().disableBody(true, false);
