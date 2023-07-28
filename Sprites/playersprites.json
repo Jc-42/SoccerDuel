@@ -276,11 +276,11 @@
       }
     },
     {
-      "filename": "playergreyidolleft000",
+      "filename": "playerrunningleft011",
       "frame": {
         "x": 0,
         "y": 150,
-        "w": 11,
+        "w": 12,
         "h": 29
       },
       "rotated": false,
@@ -288,11 +288,11 @@
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 11,
+        "w": 12,
         "h": 29
       },
       "sourceSize": {
-        "w": 11,
+        "w": 12,
         "h": 29
       },
       "pivot": {
@@ -301,11 +301,11 @@
       }
     },
     {
-      "filename": "playergreyidolleft100",
+      "filename": "playerrunningleft015",
       "frame": {
         "x": 15,
         "y": 120,
-        "w": 11,
+        "w": 15,
         "h": 29
       },
       "rotated": false,
@@ -313,11 +313,11 @@
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 11,
+        "w": 15,
         "h": 29
       },
       "sourceSize": {
-        "w": 11,
+        "w": 15,
         "h": 29
       },
       "pivot": {
@@ -326,11 +326,11 @@
       }
     },
     {
-      "filename": "playergreyidolright000",
+      "filename": "playerrunningleft111",
       "frame": {
         "x": 30,
         "y": 90,
-        "w": 11,
+        "w": 12,
         "h": 29
       },
       "rotated": false,
@@ -338,11 +338,11 @@
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 11,
+        "w": 12,
         "h": 29
       },
       "sourceSize": {
-        "w": 11,
+        "w": 12,
         "h": 29
       },
       "pivot": {
@@ -401,11 +401,11 @@
       }
     },
     {
-      "filename": "playergreyidolright100",
+      "filename": "playerrunningleft114",
       "frame": {
         "x": 0,
         "y": 179,
-        "w": 11,
+        "w": 15,
         "h": 29
       },
       "rotated": false,
@@ -413,11 +413,11 @@
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 11,
+        "w": 15,
         "h": 29
       },
       "sourceSize": {
-        "w": 11,
+        "w": 15,
         "h": 29
       },
       "pivot": {
@@ -426,10 +426,10 @@
       }
     },
     {
-      "filename": "playeridol018",
+      "filename": "playerrunningleft116",
       "frame": {
-        "x": 11,
-        "y": 150,
+        "x": 15,
+        "y": 149,
         "w": 11,
         "h": 29
       },
@@ -451,11 +451,11 @@
       }
     },
     {
-      "filename": "playeridolleft000",
+      "filename": "playerrunningright003",
       "frame": {
-        "x": 26,
-        "y": 120,
-        "w": 11,
+        "x": 30,
+        "y": 119,
+        "w": 12,
         "h": 29
       },
       "rotated": false,
@@ -463,11 +463,11 @@
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 11,
+        "w": 12,
         "h": 29
       },
       "sourceSize": {
-        "w": 11,
+        "w": 12,
         "h": 29
       },
       "pivot": {
@@ -476,11 +476,11 @@
       }
     },
     {
-      "filename": "playeridolleft100",
+      "filename": "playerrunningright007",
       "frame": {
         "x": 32,
         "y": 60,
-        "w": 11,
+        "w": 15,
         "h": 29
       },
       "rotated": false,
@@ -488,11 +488,11 @@
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 11,
+        "w": 15,
         "h": 29
       },
       "sourceSize": {
-        "w": 11,
+        "w": 15,
         "h": 29
       },
       "pivot": {
@@ -551,35 +551,10 @@
       }
     },
     {
-      "filename": "playeridolright100",
+      "filename": "playerrunningright103",
       "frame": {
         "x": 0,
         "y": 208,
-        "w": 11,
-        "h": 29
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 11,
-        "h": 29
-      },
-      "sourceSize": {
-        "w": 11,
-        "h": 29
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    {
-      "filename": "playerrunningleft011",
-      "frame": {
-        "x": 11,
-        "y": 179,
         "w": 12,
         "h": 29
       },
@@ -601,10 +576,10 @@
       }
     },
     {
-      "filename": "playerrunningleft015",
+      "filename": "playerrunningright107",
       "frame": {
-        "x": 37,
-        "y": 119,
+        "x": 15,
+        "y": 178,
         "w": 15,
         "h": 29
       },
@@ -619,6 +594,31 @@
       "sourceSize": {
         "w": 15,
         "h": 29
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "playerrunningleft014",
+      "frame": {
+        "x": 30,
+        "y": 148,
+        "w": 21,
+        "h": 27
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 1,
+        "y": 0,
+        "w": 21,
+        "h": 27
+      },
+      "sourceSize": {
+        "w": 22,
+        "h": 27
       },
       "pivot": {
         "x": 0.5,
@@ -701,123 +701,23 @@
       }
     },
     {
-      "filename": "playerrunningleft111",
+      "filename": "playerrunningright006",
       "frame": {
         "x": 0,
         "y": 237,
-        "w": 12,
-        "h": 29
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 12,
-        "h": 29
-      },
-      "sourceSize": {
-        "w": 12,
-        "h": 29
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    {
-      "filename": "playerrunningleft114",
-      "frame": {
-        "x": 22,
-        "y": 149,
-        "w": 15,
-        "h": 29
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 15,
-        "h": 29
-      },
-      "sourceSize": {
-        "w": 15,
-        "h": 29
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    {
-      "filename": "playerrunningleft116",
-      "frame": {
-        "x": 37,
-        "y": 148,
-        "w": 11,
-        "h": 29
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 11,
-        "h": 29
-      },
-      "sourceSize": {
-        "w": 11,
-        "h": 29
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    {
-      "filename": "playerrunningright003",
-      "frame": {
-        "x": 41,
-        "y": 89,
-        "w": 12,
-        "h": 29
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 12,
-        "h": 29
-      },
-      "sourceSize": {
-        "w": 12,
-        "h": 29
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    {
-      "filename": "playerrunningleft014",
-      "frame": {
-        "x": 124,
-        "y": 24,
         "w": 21,
         "h": 27
       },
       "rotated": false,
-      "trimmed": true,
+      "trimmed": false,
       "spriteSourceSize": {
-        "x": 1,
+        "x": 0,
         "y": 0,
         "w": 21,
         "h": 27
       },
       "sourceSize": {
-        "w": 22,
+        "w": 21,
         "h": 27
       },
       "pivot": {
@@ -828,8 +728,8 @@
     {
       "filename": "playerrunningleft109",
       "frame": {
-        "x": 147,
-        "y": 0,
+        "x": 30,
+        "y": 175,
         "w": 21,
         "h": 24
       },
@@ -844,106 +744,6 @@
       "sourceSize": {
         "w": 21,
         "h": 24
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    {
-      "filename": "playerrunningright007",
-      "frame": {
-        "x": 0,
-        "y": 266,
-        "w": 15,
-        "h": 29
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 15,
-        "h": 29
-      },
-      "sourceSize": {
-        "w": 15,
-        "h": 29
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    {
-      "filename": "playerrunningright103",
-      "frame": {
-        "x": 11,
-        "y": 208,
-        "w": 12,
-        "h": 29
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 12,
-        "h": 29
-      },
-      "sourceSize": {
-        "w": 12,
-        "h": 29
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    {
-      "filename": "playerrunningright107",
-      "frame": {
-        "x": 23,
-        "y": 178,
-        "w": 15,
-        "h": 29
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 15,
-        "h": 29
-      },
-      "sourceSize": {
-        "w": 15,
-        "h": 29
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    {
-      "filename": "playerrunningright006",
-      "frame": {
-        "x": 48,
-        "y": 148,
-        "w": 21,
-        "h": 27
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 21,
-        "h": 27
-      },
-      "sourceSize": {
-        "w": 21,
-        "h": 27
       },
       "pivot": {
         "x": 0.5,
@@ -953,8 +753,8 @@
     {
       "filename": "playerrunningright000",
       "frame": {
-        "x": 145,
-        "y": 24,
+        "x": 42,
+        "y": 89,
         "w": 21,
         "h": 24
       },
@@ -978,8 +778,8 @@
     {
       "filename": "playerrunningright101",
       "frame": {
-        "x": 43,
-        "y": 51,
+        "x": 124,
+        "y": 24,
         "w": 21,
         "h": 24
       },
@@ -994,31 +794,6 @@
       "sourceSize": {
         "w": 21,
         "h": 24
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    {
-      "filename": "playeridolright000",
-      "frame": {
-        "x": 26,
-        "y": 120,
-        "w": 11,
-        "h": 29
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 11,
-        "h": 29
-      },
-      "sourceSize": {
-        "w": 11,
-        "h": 29
       },
       "pivot": {
         "x": 0.5,
@@ -1028,8 +803,8 @@
     {
       "filename": "playerrunningright001",
       "frame": {
-        "x": 145,
-        "y": 24,
+        "x": 42,
+        "y": 89,
         "w": 21,
         "h": 24
       },
@@ -1057,8 +832,8 @@
     "image": "playersprites.png",
     "format": "RGBA8888",
     "size": {
-      "w": 168,
-      "h": 295
+      "w": 147,
+      "h": 264
     },
     "scale": 1
   }
