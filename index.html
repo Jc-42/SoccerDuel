@@ -358,17 +358,11 @@ class MoonScene extends Phaser.Scene{
             this.player.setCollideWorldBounds(true);
             this.player.setScale(3.4);
             this.player.body.setSize(9, 24, 4.5, 12);
-                                
-            this.kickHitBox = scene.physics.add.sprite(this.player.x, this.player.y, null);
-            this.kickHitBox.setVisible(false); // Make the hitbox invisible
-            this.kickHitBox.setSize(50, 50); // Set the size of the hitbox
-            this.kickHitBox.setVelocity(0, 0); // Set the velocity of the hitbox
             this.lastKickTime = 0;
             this.num = n;
             this.directionFacing = 1;
 
             this.score = 0;
-        //    this.physics.collide(this.player,this.ground);
         }
         
         update(up, left, down, right){
@@ -385,7 +379,7 @@ class MoonScene extends Phaser.Scene{
                         this.player.setVelocityX(this.player.body.velocity.x * .9);
                     }
 
-                    //Grey player out when not moving or pressing oposite keys
+                    //Grey player out by default
                     if(this.directionFacing === 1){
                         if(this.num === 1){ 
                             this.player.setTexture('RedGreyRight');
@@ -428,6 +422,7 @@ class MoonScene extends Phaser.Scene{
                     //Set direction facing for textures
                     this.directionFacing = 1;
 
+                    //Move slower in the air
                     if (!this.player.body.blocked.down) {
                         this.player.setVelocityX(this.player.body.velocity.x + 20);
                     }
@@ -436,6 +431,7 @@ class MoonScene extends Phaser.Scene{
                     }
                 }
 
+                //Override the grey textures if the player is pressing any movement key. But not when pressing left and right (to prevent puppy guarding goal)  
                 if(up.isDown || down.isDown || (left.isDown && !right.isDown) || (!left.isDown && right.isDown) ){
                     if(this.directionFacing === 1){
                         if(this.num === 1){ 
@@ -471,10 +467,6 @@ class MoonScene extends Phaser.Scene{
             if(Math.abs(this.player.body.velocity.x) > 525){
                 this.player.setVelocityX(525 * Math.sign(this.player.body.velocity.x));
             }
-            this.kickHitBox.x = this.player.x;
-            this.kickHitBox.y = this.player.y;
-            this.kickHitBox.setVelocityX(0);
-            this.kickHitBox.setVelocityY(0);
 
         
         }
@@ -507,29 +499,29 @@ class MoonScene extends Phaser.Scene{
             return this.player.body.height;
         }
 
-            getLastKickTime() {
-                return this.lastKickTime;
-            }
+        getLastKickTime() {
+            return this.lastKickTime;
+        }
 
-            getHeight() {
-                return this.player.body.height;
-            }
+        getHeight() {
+            return this.player.body.height;
+        }
 
-            getWidth() {
-                return this.player.body.height;
-            }
+        getWidth() {
+            return this.player.body.height;
+        }
 
-            setLastKickTime(n) {
-                this.lastKickTime = n;
-            }
+        setLastKickTime(n) {
+            this.lastKickTime = n;
+        }
 
-            increaseScore() {
-                this.score++;
-            }
+        increaseScore() {
+            this.score++;
+        }
 
-            setX(n) {
-                this.player.x = n;
-            }
+        setX(n) {
+            this.player.x = n;
+        }
 
         setY(n){
             this.player.y = n;
@@ -561,7 +553,7 @@ class MoonScene extends Phaser.Scene{
 
             //Add friction to the ball
             if(this.ball.body.blocked.down){
-                //this.scene.sound.play("kick");
+                this.scene.sound.play("kick");
                 this.ball.setVelocityX(this.ball.body.velocity.x * .7);
                 this.ball.setVelocityY(this.ball.body.velocity.y * .7);
             }
@@ -572,90 +564,91 @@ class MoonScene extends Phaser.Scene{
             }
 
                 //Ball will always bounce
-                if (this.ball.body.blocked.down && Math.abs(this.ball.body.velocity.y) < 400) {
-                    this.ball.setVelocityY(-400);
-                }
-            }
-
-            getSprite() {
-                return this.ball;
-            }
-
-            getX() {
-                return this.ball.x;
-            }
-
-            getY() {
-                return this.ball.y;
-            }
-
-            getVelocityX() {
-                return this.ball.body.velocity.x;
-            }
-
-            getVelocityY() {
-                return this.ball.body.velocity.y;
-            }
-
-            getWidth() {
-                return this.ball.body.width;
-            }
-
-            getHeight() {
-                return this.ball.body.height;
-            }
-
-            setVelocityX(velX) {
-                this.ball.setVelocityX(velX);
-            }
-
-            setVelocityY(velY) {
-                this.ball.setVelocityY(velY);
-            }
-
-            setX(n) {
-                this.ball.x = n;
-            }
-
-            setY(n) {
-                this.ball.y = n;
-            }
-
-
-        }
-
-        class Goal {
-            constructor(x, y, sprite, scene) {
-                this.goal = scene.physics.add.sprite(x, y, sprite);
-                this.goal.body.setAllowGravity(false);
-                this.goal.setScale(1);
-            }
-
-            getSprite() {
-                return this.goal;
-            }
-
-            getHeight()
-            {
-                return this.goal.body.height;
-            }
-
-            getWidth()
-            {
-                return this.goal.body.width;
-            }
-
-            getX()
-            {
-                return this.goal.x;
-            }
-
-            getY()
-            {
-                return this.goal.y;
+            if (this.ball.body.blocked.down && Math.abs(this.ball.body.velocity.y) < 400) {
+                this.ball.setVelocityY(-400);
             }
 
         }
+
+        getSprite() {
+            return this.ball;
+        }
+
+        getX() {
+            return this.ball.x;
+        }
+
+        getY() {
+            return this.ball.y;
+        }
+
+        getVelocityX() {
+            return this.ball.body.velocity.x;
+        }
+
+        getVelocityY() {
+            return this.ball.body.velocity.y;
+        }
+
+        getWidth() {
+            return this.ball.body.width;
+        }
+
+        getHeight() {
+            return this.ball.body.height;
+        }
+
+        setVelocityX(velX) {
+            this.ball.setVelocityX(velX);
+        }
+
+        setVelocityY(velY) {
+            this.ball.setVelocityY(velY);
+        }
+
+        setX(n) {
+            this.ball.x = n;
+        }
+
+        setY(n) {
+            this.ball.y = n;
+        }
+
+
+    }
+
+    class Goal {
+        constructor(x, y, sprite, scene) {
+            this.goal = scene.physics.add.sprite(x, y, sprite);
+            this.goal.body.setAllowGravity(false);
+            this.goal.setScale(1);
+        }
+
+        getSprite() {
+            return this.goal;
+        }
+
+        getHeight()
+        {
+            return this.goal.body.height;
+        }
+
+        getWidth()
+        {
+            return this.goal.body.width;
+        }
+
+        getX()
+        {
+            return this.goal.x;
+        }
+
+        getY()
+        {
+            return this.goal.y;
+        }
+
+    }
 
 
     /*{
@@ -664,18 +657,8 @@ class MoonScene extends Phaser.Scene{
 //            update: update, 
             scene: Scene1
 
-            getWidth() {
-                return this.goal.body.width;
-            }
-
-            getX() {
-                return this.goal.x;
-            }
-
-            getY() {
-                return this.goal.y;
-            }
-        }
+            
+        }*/
 
         class Wall {
             constructor(x, y, width, height, color, scene) {
@@ -936,6 +919,7 @@ class MoonScene extends Phaser.Scene{
                 //Update timer to count down from 2:00 to 0
                 let newTime = parseInt((121000 - (this.time.now - this.startTime)) / 1000);
 
+                //Timer display
                 if(newTime % 60 <= 9 && newTime % 60 >= 0){
                     this.timerText.setText(parseInt(newTime / 60) + ':0' + newTime % 60);
                 }
@@ -944,6 +928,7 @@ class MoonScene extends Phaser.Scene{
                 }
                 else{
                     this.timerText.setText('0:00');
+                    
                     if (this.playerOne.score > this.playerTwo.score)
                     {
                         this.gameOverText = this.add.text(config.width / 2 - 160, 100, 'Player 1 Wins!', { fontSize: '40px', fill: '#000' })
@@ -956,6 +941,7 @@ class MoonScene extends Phaser.Scene{
                     {
                         this.gameOverText = this.add.text(config.width / 2 - 135, 100, "It's a tie!", { fontSize: '40px', fill: '#000' })
                     }
+
                     this.playerOne.getSprite().disableBody(true, false);
                     this.playerTwo.getSprite().disableBody(true, false);
                     this.soccerBall.getSprite().disableBody(true, false);
