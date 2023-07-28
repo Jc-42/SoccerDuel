@@ -526,6 +526,15 @@ class MoonScene extends Phaser.Scene{
         setY(n){
             this.player.y = n;
         }
+
+        setVelocityX(velX){
+            this.player.body.velocity.x = velX
+        }
+
+        setVelocityY(velY){
+            this.player.body.velocity.y = velY
+        }
+
         
         
         
@@ -793,9 +802,13 @@ class MoonScene extends Phaser.Scene{
                         ball.setVelocityY(0);
                         this.playerTwo.increaseScore();
                         this.playerOne.setX(config.width * .75);
-                        this.playerOne.setY(config.height - 99);
+                        this.playerOne.setY(config.height - 104);
+                        this.playerOne.setVelocityX(0);
+                        this.playerOne.setVelocityY(0);
                         this.playerTwo.setX(config.width / 4);
-                        this.playerTwo.setY(config.height - 99);
+                        this.playerTwo.setY(config.height - 104);
+                        this.playerTwo.setVelocityX(0);
+                        this.playerTwo.setVelocityY(0);
                         this.playerTwoScoreText.setText('' + this.playerTwo.score);
                         //this.sound.play("goal");
                     }
@@ -810,9 +823,13 @@ class MoonScene extends Phaser.Scene{
                         ball.setVelocityY(0);
                         this.playerOne.increaseScore();
                         this.playerOne.setX(config.width * .75);
-                        this.playerOne.setY(config.height - 99);
+                        this.playerOne.setY(config.height - 104);
+                        this.playerOne.setVelocityX(0);
+                        this.playerOne.setVelocityY(0);
                         this.playerTwo.setX(config.width / 4);
-                        this.playerTwo.setY(config.height - 99);
+                        this.playerTwo.setY(config.height - 104);
+                        this.playerTwo.setVelocityX(0);
+                        this.playerTwo.setVelocityY(0);
                         this.playerOneScoreText.setText('' + this.playerOne.score);
                         //this.sound.play("goal");
                     }
