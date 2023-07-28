@@ -373,6 +373,8 @@ class MoonScene extends Phaser.Scene{
         
         update(up, left, down, right){
 
+                
+
                 //Slowdown when not pressing anything or pressing oposite movement
                 if (left.isDown && right.isDown || !left.isDown && !right.isDown) {
 
@@ -383,17 +385,34 @@ class MoonScene extends Phaser.Scene{
                         this.player.setVelocityX(this.player.body.velocity.x * .9);
                     }
 
+                    //Grey player out when not moving or pressing oposite keys
+                    if(this.directionFacing === 1){
+                        if(this.num === 1){ 
+                            this.player.setTexture('RedGreyRight');
+                        }
+                        else{
+                            this.player.setTexture('BlueGreyRight');
+                        }
+
+                    }
+                    else if(this.directionFacing === -1){
+                        if(this.num === 1){
+                            this.player.setTexture('RedGreyLeft');
+                            
+                        }
+                        else{
+                            this.player.setTexture('BlueGreyLeft');
+                        }
+                    }
+                    
+
                 }
 
                 else if (left.isDown) {
-                    if(this.num === 2){
-                        this.directionFacing = -1;
-                        this.player.setTexture('BlueLeft');
-                    }
-                    else{
-                        this.directionFacing = -1;
-                        this.player.setTexture('RedLeft')
-                    }
+                    
+                    //Set direction facing for textures
+                    this.directionFacing = -1;
+                    
                     //Move slower in the air
                     if (!this.player.body.blocked.down) {
                         this.player.setVelocityX(this.player.body.velocity.x - 20);
@@ -405,14 +424,9 @@ class MoonScene extends Phaser.Scene{
 
                 }
                 else if (right.isDown) {
-                    if(this.num === 2){
-                        this.directionFacing = 1;
-                        this.player.setTexture('BlueRight');
-                    }
-                    else{
-                        this.directionFacing = 1;
-                        this.player.setTexture('RedRight');
-                    }
+                
+                    //Set direction facing for textures
+                    this.directionFacing = 1;
 
                     if (!this.player.body.blocked.down) {
                         this.player.setVelocityX(this.player.body.velocity.x + 20);
@@ -421,22 +435,30 @@ class MoonScene extends Phaser.Scene{
                         this.player.setVelocityX(this.player.body.velocity.x + 140);
                     }
                 }
-                else if(this.directionFacing === 1){
-                    if(this.num === 1){
-                        this.player.setTexture('BlueGreyRight');
+
+                if(up.isDown || down.isDown || (left.isDown && !right.isDown) || (!left.isDown && right.isDown) ){
+                    if(this.directionFacing === 1){
+                        if(this.num === 1){ 
+                            this.player.setTexture('RedRight');
+                        }
+                        else{
+                            this.player.setTexture('BlueRight');
+                        }
+
                     }
-                    else{
-                        this.player.setTexture('RedGreyRight');
+                    else if(this.directionFacing === -1){
+                        if(this.num === 1){
+                            this.player.setTexture('RedLeft');
+                            
+                        }
+                        else{
+                            this.player.setTexture('BlueLeft');
+                        }
                     }
                 }
-                else if(this.directionFacing === -1){
-                    if(this.num === 1){
-                        this.player.setTexture('BlueGreyLeft');
-                    }
-                    else{
-                        this.player.setTexture('RedGreyLeft');
-                    }
-                }
+
+               
+                
                 
 
                 //Jump
@@ -718,10 +740,10 @@ class MoonScene extends Phaser.Scene{
                 this.load.image('RightGoal', 'Sprites/Right_Goal.png');
                 this.load.image('LeftGoal', 'Sprites/Left_Goal.png');
 
-                this.load.image('BlueGreyRight', 'Sprites/blueGreyRight');
-                this.load.image('BlueGreyLeft', 'Sprites/blueGreyLeft');
-                this.load.image('RedGreyRight', 'Sprites/redGreyRight');
-                this.load.image('RedGreyLeft', 'Sprites/redGreyLeft');
+                this.load.image('BlueGreyRight', 'Sprites/blueGreyRight.png');
+                this.load.image('BlueGreyLeft', 'Sprites/blueGreyLeft.png');
+                this.load.image('RedGreyRight', 'Sprites/redGreyRight.png');
+                this.load.image('RedGreyLeft', 'Sprites/redGreyLeft.png');
 
                 this.load.image("tiles", "tiles/tilesheet_complete.png");
                 this.load.tilemapTiledJSON("grassyField", "tiles/defaultField.tmj");
