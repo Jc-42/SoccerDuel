@@ -431,8 +431,8 @@ class MoonScene extends Phaser.Scene{
                     }
                 }
 
-                //Override the grey textures if the player is pressing any movement key. But not when pressing left and right (to prevent puppy guarding goal)  
-                if(up.isDown || down.isDown || (left.isDown && !right.isDown) || (!left.isDown && right.isDown) ){
+                //Override the grey textures if the player is pressing any movement key. But not when pressing left and right (to prevent puppy guarding goal). Or when player is pressing down and on the ground (because player can only down kick in midair)  
+                if(up.isDown || down.isDown && !this.player.body.blocked.down || (left.isDown && !right.isDown) || (!left.isDown && right.isDown)){
                     if(this.directionFacing === 1){
                         if(this.num === 1){ 
                             this.player.setTexture('RedRight');
@@ -928,7 +928,7 @@ class MoonScene extends Phaser.Scene{
                 }
                 else{
                     this.timerText.setText('0:00');
-                    
+
                     if (this.playerOne.score > this.playerTwo.score)
                     {
                         this.gameOverText = this.add.text(config.width / 2 - 160, 100, 'Player 1 Wins!', { fontSize: '40px', fill: '#000' })
