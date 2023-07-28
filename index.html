@@ -18,7 +18,7 @@
                     default: 'arcade',
                     arcade: {
                         gravity: { y: 1000 },
-                        debug: false
+                        debug: true
                     }
                 },
                 scale: 
@@ -631,10 +631,19 @@ class MoonScene extends Phaser.Scene{
             this.goal = scene.physics.add.sprite(x, y, sprite);
             this.goal.body.setAllowGravity(false);
             this.goal.setScale(1);
+
+            // Create the top collider
+            this.topCollider = scene.physics.add.staticSprite(x, y - this.goal.body.height / 2, null);
+            this.topCollider.body.setSize(this.goal.body.width, 1);
+            this.topCollider.setVisible(false);
         }
 
         getSprite() {
             return this.goal;
+        }
+
+        getTopCollider() {
+            return this.topCollider;
         }
 
         getHeight()
@@ -835,6 +844,11 @@ class MoonScene extends Phaser.Scene{
                     }
                     return false;
                 }, this);
+
+                //Ball collision with top of goal
+                this.physics.add.collider(this.soccerBall.getSprite(), this.leftGoal.getTopCollider(), null, null, this);
+                
+                this.physics.add.collider(this.soccerBall.getSprite(), this.rightGoal.getTopCollider(), null, null, this);
 
                 //Add collision between the ball and the walls and the player and the walls
                 for (this.i = 0; this.i < this.walls.length;this.i++) {
