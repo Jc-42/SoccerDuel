@@ -1,5 +1,5 @@
 {
-	"frames": {
+	"frames": [
 		"playergreyidolleft000.png": {
 			"frame": {
 				"x": 1,
@@ -80,7 +80,7 @@
 				"h": 29
 			}
 		},
-		"playerrunningleft009.png": {
+		"playerrunningleft000.png": {
 			"frame": {
 				"x": 53,
 				"y": 1,
@@ -100,7 +100,7 @@
 				"h": 24
 			}
 		},
-		"playerrunningleft010.png": {
+		"playerrunningleft001.png": {
 			"frame": {
 				"x": 76,
 				"y": 1,
@@ -420,7 +420,7 @@
 				"h": 30
 			}
 		}
-	},
+	],
 	"meta": {
 		"app": "http://www.codeandweb.com/texturepacker",
 		"version": "1.0",

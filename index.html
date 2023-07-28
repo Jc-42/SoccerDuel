@@ -358,7 +358,6 @@ class MoonScene extends Phaser.Scene{
             scene.add.existing(this);
             scene.physics.add.existing(this);
 
-
             this.setVelocity(0, 0);
             this.setBounce(0, 0);
             this.setCollideWorldBounds(true);
@@ -368,6 +367,7 @@ class MoonScene extends Phaser.Scene{
             this.lastKickTime = 0;
             this.num = n;
             this.directionFacing = 1;
+
 
             this.score = 0;
         //    this.physics.collide(this,this.ground);
@@ -467,7 +467,11 @@ class MoonScene extends Phaser.Scene{
 
                */
                 
-                
+                if (this.directionFacing === 1) {
+                    this.setFlipX(false);
+                } else {
+                    this.setFlipX(true);
+                }
 
                 //Jump
                 if (up.isDown && this.body.blocked.down) {
@@ -774,9 +778,9 @@ class MoonScene extends Phaser.Scene{
                 this.load.audio("kick", "sfx/Kick.wav");
                 this.load.audio("goal", "sfx/Goal.wav")
 
-
-                this.load.atlas('player', 'Sprites/player000spritesheet.png', 'Sprites/player000spritesheet.json');
-                this.load.atlas('player2', 'Sprites/player100spritesheet.png', 'Sprites/player100spritesheet.json');
+                this.load.atlas('players', 'Sprites/playersprites.png', 'Sprites/playersprites.json');
+                //this.load.atlas('player', 'Sprites/player000spritesheet.png', 'Sprites/player000spritesheet.json');
+                //this.load.atlas('player2', 'Sprites/player100spritesheet.png', 'Sprites/player100spritesheet.json');
             }
 
             create() {
@@ -797,8 +801,8 @@ class MoonScene extends Phaser.Scene{
                 //Player one animations
                 
                 //var idle = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
-                var righta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: 'runningright.png', end: 10, zeroPad: 2}), repeat: -1, frameRate: 10});
-                var lefta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: 'runningright.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var righta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('players', {prefix: 'playerrunningright0', end: 8, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var lefta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('players', {prefix: 'playerrunningleft0', start: 9, end: 16, zeroPad: 2}), repeat: -1, frameRate: 10});
                 //playerAnimations['idle'] = idle;
                 playerAnimations['right'] = righta;
                 playerAnimations['left'] = lefta;
@@ -806,8 +810,8 @@ class MoonScene extends Phaser.Scene{
 
                 //Player two animations
                 //var idle2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
-                var righta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: 'runningright.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
-                var lefta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: 'runningright.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var righta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('players', {prefix: 'playerrunningright1', end: 8, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var lefta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('players', {prefix: 'playerrunningleft1', start: 9, end: 16, zeroPad: 2}), repeat: -1, frameRate: 10});
                 //player2Animations['idle'] = idle2;
                 player2Animations['right'] = righta2;
                 player2Animations['left'] = lefta2;
@@ -1055,21 +1059,21 @@ class MoonScene extends Phaser.Scene{
                 if (this.cursors.left.isDown)
                 {
                     this.playerTwo.play(playerAnimations['left'], true);
-                    //console.log("p1 left");
+                    console.log("p2 left");
                 } else if (this.cursors.right.isDown)
                 {
                     this.playerTwo.play(playerAnimations['right'], true);
-                    //console.log("p1 right");
+                    console.log("p2 right");
                 } 
                 
                 if (this.keys.A.isDown)
                 {
                     this.playerOne.play(player2Animations['left'], true);
-                    //console.log("p2 left");
+                    console.log("p1 left");
                 } else if (this.keys.D.isDown)
                 {
                     this.playerOne.play(player2Animations['right'], true);
-                    //console.log("p2 right");
+                    console.log("p1 right");
                 }
                 
             }
