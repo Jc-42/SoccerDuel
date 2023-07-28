@@ -388,6 +388,7 @@ class MoonScene extends Phaser.Scene{
                     }
 
                     //Grey player out by default
+                    
                     if(this.directionFacing === 1){
                         if(this.num === 1){ 
                             this.setTexture('RedGreyRight');
@@ -442,6 +443,7 @@ class MoonScene extends Phaser.Scene{
                 }
 
                 //Override the grey textures if the player is pressing any movement key. But not when pressing left and right (to prevent puppy guarding goal). Or when player is pressing down and on the ground (because player can only down kick in midair)  
+                /*
                 if(up.isDown || down.isDown && !this.body.blocked.down || (left.isDown && !right.isDown) || (!left.isDown && right.isDown)){
                     if(this.directionFacing === 1){
                         if(this.num === 1){ 
@@ -463,7 +465,7 @@ class MoonScene extends Phaser.Scene{
                     }
                 }
 
-               
+               */
                 
                 
 
@@ -773,8 +775,8 @@ class MoonScene extends Phaser.Scene{
                 this.load.audio("goal", "sfx/Goal.wav")
 
 
-                this.load.atlas('player', 'Sprites/player000.png', 'Sprites/spritesheet1.json');
-                this.load.atlas('player2', 'Sprites/player100.png', 'Sprites/spritesheet2.json');
+                this.load.atlas('player', 'Sprites/player000spritesheet.png', 'Sprites/player000spritesheet.json');
+                this.load.atlas('player2', 'Sprites/player100spritesheet.png', 'Sprites/player100spritesheet.json');
             }
 
             create() {
@@ -794,19 +796,19 @@ class MoonScene extends Phaser.Scene{
 
                 //Player one animations
                 
-                var idle = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
-                var righta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
-                var lefta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
-                playerAnimations['idle'] = idle;
+                //var idle = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var righta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: 'runningright.png', end: 10, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var lefta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: 'runningright.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                //playerAnimations['idle'] = idle;
                 playerAnimations['right'] = righta;
                 playerAnimations['left'] = lefta;
 
 
                 //Player two animations
-                var idle2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
-                var righta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
-                var lefta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
-                player2Animations['idle'] = idle2;
+                //var idle2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var righta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: 'runningright.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var lefta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: 'runningright.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
+                //player2Animations['idle'] = idle2;
                 player2Animations['right'] = righta2;
                 player2Animations['left'] = lefta2;
                 
@@ -827,9 +829,6 @@ class MoonScene extends Phaser.Scene{
                 this.rightGoal = new Goal(config.width - 3, 553, 'RightGoal', this);
                 this.walls = [];
                 this.gameOver = false;
-
-                this.playerOne.play(playerAnimations['idle']);
-                this.playerTwo.play(player2Animations['idle']);
                 
                 this.physics.add.collider(this.playerOne.getSprite(), this.ground);
                 this.physics.add.collider(this.playerTwo.getSprite(), this.ground);
@@ -1054,29 +1053,22 @@ class MoonScene extends Phaser.Scene{
                 
                 if (this.cursors.left.isDown)
                 {
-                    this.playerOne.play(playerAnimations['left'], true);
+                    this.playerTwo.play(playerAnimations['left'], true);
                     //console.log("p1 left");
                 } else if (this.cursors.right.isDown)
                 {
-                    this.playerOne.play(playerAnimations['right'], true);
+                    this.playerTwo.play(playerAnimations['right'], true);
                     //console.log("p1 right");
-                } else 
-                {
-                    this.playerOne.play(playerAnimations['idle'], true);
-                    
-                }
+                } 
                 
                 if (this.keys.A.isDown)
                 {
-                    this.playerTwo.play(player2Animations['left'], true);
+                    this.playerOne.play(player2Animations['left'], true);
                     //console.log("p2 left");
                 } else if (this.keys.D.isDown)
                 {
-                    this.playerTwo.play(player2Animations['right'], true);
+                    this.playerOne.play(player2Animations['right'], true);
                     //console.log("p2 right");
-                } else 
-                {
-                    this.playerTwo.play(player2Animations['idle'], true);
                 }
                 
             }
