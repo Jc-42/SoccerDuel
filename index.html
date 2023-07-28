@@ -365,6 +365,7 @@ class MoonScene extends Phaser.Scene{
             this.kickHitBox.setVelocity(0, 0); // Set the velocity of the hitbox
             this.lastKickTime = 0;
             this.num = n;
+            this.directionFacing = 1;
 
             this.score = 0;
         //    this.physics.collide(this.player,this.ground);
@@ -386,9 +387,11 @@ class MoonScene extends Phaser.Scene{
 
                 else if (left.isDown) {
                     if(this.num === 2){
+                        this.directionFacing = -1;
                         this.player.setTexture('BlueLeft');
                     }
                     else{
+                        this.directionFacing = -1;
                         this.player.setTexture('RedLeft')
                     }
                     //Move slower in the air
@@ -403,9 +406,11 @@ class MoonScene extends Phaser.Scene{
                 }
                 else if (right.isDown) {
                     if(this.num === 2){
+                        this.directionFacing = 1;
                         this.player.setTexture('BlueRight');
                     }
                     else{
+                        this.directionFacing = 1;
                         this.player.setTexture('RedRight');
                     }
 
@@ -416,6 +421,23 @@ class MoonScene extends Phaser.Scene{
                         this.player.setVelocityX(this.player.body.velocity.x + 140);
                     }
                 }
+                else if(this.directionFacing === 1){
+                    if(this.num === 1){
+                        this.player.setTexture('BlueGreyRight');
+                    }
+                    else{
+                        this.player.setTexture('RedGreyRight');
+                    }
+                }
+                else if(this.directionFacing === -1){
+                    if(this.num === 1){
+                        this.player.setTexture('BlueGreyLeft');
+                    }
+                    else{
+                        this.player.setTexture('RedGreyLeft');
+                    }
+                }
+                
 
                 //Jump
                 if (up.isDown && this.player.body.blocked.down) {
@@ -695,12 +717,19 @@ class MoonScene extends Phaser.Scene{
                 this.load.image('Background', 'Sprites/Background.png');
                 this.load.image('RightGoal', 'Sprites/Right_Goal.png');
                 this.load.image('LeftGoal', 'Sprites/Left_Goal.png');
+
+                this.load.image('BlueGreyRight', 'Sprites/blueGreyRight');
+                this.load.image('BlueGreyLeft', 'Sprites/blueGreyLeft');
+                this.load.image('RedGreyRight', 'Sprites/redGreyRight');
+                this.load.image('RedGreyLeft', 'Sprites/redGreyLeft');
+
                 this.load.image("tiles", "tiles/tilesheet_complete.png");
                 this.load.tilemapTiledJSON("grassyField", "tiles/defaultField.tmj");
                 this.load.image("GameOverButton", "mainMenu/playButton.png");
                 this.load.image("arrow", "mainMenu/arrow.png");
                 this.load.audio("menuHover", "music/menuHover.wav");
                 this.load.audio("menuSelect", "music/menuSelect.wav");
+                
 
                 this.load.audio("kick", "sfx/Kick.wav");
                 this.load.audio("goal", "sfx/Goal.wav")
@@ -813,7 +842,6 @@ class MoonScene extends Phaser.Scene{
 
                 //Kick code 
                 //Player should kick when ever the player moves into the ball
-                //If not the Idle Touch code should run
                 
 
                 //Up and left kick
@@ -849,14 +877,14 @@ class MoonScene extends Phaser.Scene{
                 }
 
                 //Left straight kick
-                else if (playerNum === 1 && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && this.keys.A.isDown && ball.getX() - player.getX() <= 0 === true) {
+                else if (playerNum === 1 && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 && this.cursors.right.isUp|| playerNum === 2 && this.keys.A.isDown && ball.getX() - player.getX() <= 0 && this.keys.D.isUp) {
                     ball.setVelocityX(-90 - (Math.abs(player.getVelocityX())));
                     player.setLastKickTime(currentTime);
                     this.sound.play("kick");
                 } 
                 
                 //Right straight kick
-                else if (playerNum === 1 && this.cursors.right.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && this.keys.D.isDown && this.keys.D.isDown && ball.getX() - player.getX() > 0) {
+                else if (playerNum === 1 && this.cursors.right.isDown && ball.getX() - player.getX() > 0 && this.cursors.left.isUp || playerNum === 2 && this.keys.D.isDown && this.keys.D.isDown && ball.getX() - player.getX() > 0 && this.keys.A.isUp) {
                     ball.setVelocityX(90 + (Math.abs(player.getVelocityX()))); 
                     player.setLastKickTime(currentTime);
                     this.sound.play("kick");
