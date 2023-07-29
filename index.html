@@ -734,6 +734,7 @@ class Previews{
             gameOverText;
             returnToHomeButton; 
             newTime;
+            startTime;
 
             
 
@@ -778,6 +779,7 @@ class Previews{
                 const sky = this.map.createLayer("Tile Layer 4", tileset);
                 const landscape = this.map.createLayer("Tile Layer 2", tileset);
                 const flowers = this.map.createLayer("Tile Layer 3", tileset);
+                this.startTime = this.time.now;
                 
                 //hoverSprite.setVisible(false);
                 
@@ -903,6 +905,7 @@ class Previews{
                     this.playerOneScoreText = this.add.text(300, 30, '0', { fontSize: '60px', fill: color });
                     this.playerTwoScoreText = this.add.text(config.width - 300, 30, '0', { fontSize: '60px', fill: color });
                     this.timerText = this.add.text(config.width / 2 - 90, 20, '', { fontSize: '90px', fill: color })
+
                 }
 
                 endGame(color)
@@ -1030,49 +1033,49 @@ class Previews{
 
                 update() {
                 //Movment & Controls
-                this.playerOne.update(this.cursors.up, this.cursors.left, this.cursors.down, this.cursors.right);
-                this.playerTwo.update(this.keys.W, this.keys.A, this.keys.S, this.keys.D);
-                this.soccerBall.update();
+                    this.playerOne.update(this.cursors.up, this.cursors.left, this.cursors.down, this.cursors.right);
+                    this.playerTwo.update(this.keys.W, this.keys.A, this.keys.S, this.keys.D);
+                    this.soccerBall.update();
 
-                //Update timer to count down from 2:00 to 0
-                this.newTime = parseInt((121000 - (this.time.now - this.startTime)) / 1000);
+                    //Update timer to count down from 2:00 to 0
+                    this.newTime = parseInt((121000 - (this.time.now - this.startTime)) / 1000);
 
-                //Timer display
-                if (this.newTime % 60 <= 9 && this.newTime % 60 >= 0) {
-                    this.timerText.setText(parseInt(this.newTime / 60) + ':0' + this.newTime % 60);
-                }
-                else if (this.newTime % 60 > 9 && this.newTime >= 0) {
-                    this.timerText.setText(parseInt(this.newTime / 60) + ':' + this.newTime % 60);
-                }
+                    //Timer display
+                    if (this.newTime % 60 <= 9 && this.newTime % 60 >= 0) {
+                        this.timerText.setText(parseInt(this.newTime / 60) + ':0' + this.newTime % 60);
+                    }
+                    else if (this.newTime % 60 > 9 && this.newTime >= 0) {
+                        this.timerText.setText(parseInt(this.newTime / 60) + ':' + this.newTime % 60);
+                    }
 
-                //Ends game
+                    //Ends game
 
-                this.endGame('#000');
+                    this.endGame('#000');
 
-                //Set up animation controls
-                
-                if (this.cursors.left.isDown)
-                {
-                    this.playerTwo.play(playerAnimations['left'], true);
-                    console.log("p2 left");
-                } else if (this.cursors.right.isDown)
-                {
-                    this.playerTwo.play(playerAnimations['right'], true);
-                    console.log("p2 right");
-                } 
-                
-                if (this.keys.A.isDown)
-                {
-                    this.playerOne.play(player2Animations['left'], true);
-                    console.log("p1 left");
-                } else if (this.keys.D.isDown)
-                {
-                    this.playerOne.play(player2Animations['right'], true);
-                    console.log("p1 right");
-                }
+                    //Set up animation controls
+                    
+                    if (this.cursors.left.isDown)
+                    {
+                        this.playerTwo.play(playerAnimations['left'], true);
+                        console.log("p2 left");
+                    } else if (this.cursors.right.isDown)
+                    {
+                        this.playerTwo.play(playerAnimations['right'], true);
+                        console.log("p2 right");
+                    } 
+                    
+                    if (this.keys.A.isDown)
+                    {
+                        this.playerOne.play(player2Animations['left'], true);
+                        console.log("p1 left");
+                    } else if (this.keys.D.isDown)
+                    {
+                        this.playerOne.play(player2Animations['right'], true);
+                        console.log("p1 right");
+                    }
 
 
-                }
+                    }
 
 
 
