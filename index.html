@@ -685,25 +685,19 @@
         }
 
 
-        
-    class Player extends Phaser.Physics.Arcade.Sprite{
-        constructor(x, y, scene, n, direction, spritesheet, animations){
 
-            super(scene, x, y, spritesheet);
-            this.animations = animations;
-            scene.add.existing(this);
-            scene.physics.add.existing(this);
+        class Player {
+            constructor(x, y, scene, n, direction) {
+                this.player = scene.physics.add.sprite(x, y, direction);
 
-            this.setVelocity(0, 0);
-            this.setBounce(0, 0);
-            this.setCollideWorldBounds(true);
-            this.setScale(3.4);
-            //this.body.setSize(9, 24, 4.5, 12);
-            this.setBodySize(10, 20, true);
-            this.lastKickTime = 0;
-            this.num = n;
-            this.directionFacing = 1;
-
+                this.player.setVelocity(0, 0);
+                this.player.setBounce(0, 0);
+                this.player.setCollideWorldBounds(true);
+                this.player.setScale(3.4);
+                this.player.body.setSize(9, 24, 4.5, 12);
+                this.lastKickTime = 0;
+                this.num = n;
+                this.directionFacing = 1;
 
                 this.score = 0;
             }
@@ -715,31 +709,30 @@
                 //Slowdown when not pressing anything or pressing oposite movement
                 if (left.isDown && right.isDown || !left.isDown && !right.isDown) {
 
-                    if (this.body.blocked.down) {
-                        this.setVelocityX(this.body.velocity.x * .4);
+                    if (this.player.body.blocked.down) {
+                        this.player.setVelocityX(this.player.body.velocity.x * .4);
                     }
                     else {
-                        this.setVelocityX(this.body.velocity.x * .9);
+                        this.player.setVelocityX(this.player.body.velocity.x * .9);
                     }
 
                     //Grey player out by default
-                    
-                    if(this.directionFacing === 1){
-                        if(this.num === 1){ 
-                            this.setTexture('RedGreyRight');
+                    if (this.directionFacing === 1) {
+                        if (this.num === 1) {
+                            this.player.setTexture('RedGreyRight');
                         }
-                        else{
-                            this.setTexture('BlueGreyRight');
+                        else {
+                            this.player.setTexture('BlueGreyRight');
                         }
 
                     }
-                    else if(this.directionFacing === -1){
-                        if(this.num === 1){
-                            this.setTexture('RedGreyLeft');
-                            
+                    else if (this.directionFacing === -1) {
+                        if (this.num === 1) {
+                            this.player.setTexture('RedGreyLeft');
+
                         }
-                        else{
-                            this.setTexture('BlueGreyLeft');
+                        else {
+                            this.player.setTexture('BlueGreyLeft');
                         }
                     }
 
@@ -747,18 +740,16 @@
                 }
 
                 else if (left.isDown) {
-                    //Add amiations
 
-                    
                     //Set direction facing for textures
                     this.directionFacing = -1;
 
                     //Move slower in the air
-                    if (!this.body.blocked.down) {
-                        this.setVelocityX(this.body.velocity.x - 20);
+                    if (!this.player.body.blocked.down) {
+                        this.player.setVelocityX(this.player.body.velocity.x - 20);
                     }
                     else {
-                        this.setVelocityX(this.body.velocity.x - 140);
+                        this.player.setVelocityX(this.player.body.velocity.x - 140);
                     }
 
 
@@ -769,97 +760,92 @@
                     this.directionFacing = 1;
 
                     //Move slower in the air
-                    if (!this.body.blocked.down) {
-                        this.setVelocityX(this.body.velocity.x + 20);
+                    if (!this.player.body.blocked.down) {
+                        this.player.setVelocityX(this.player.body.velocity.x + 20);
                     }
                     else {
-                        this.setVelocityX(this.body.velocity.x + 140);
+                        this.player.setVelocityX(this.player.body.velocity.x + 140);
                     }
                 }
 
                 //Override the grey textures if the player is pressing any movement key. But not when pressing left and right (to prevent puppy guarding goal). Or when player is pressing down and on the ground (because player can only down kick in midair)  
-                /*
-                if(up.isDown || down.isDown && !this.body.blocked.down || (left.isDown && !right.isDown) || (!left.isDown && right.isDown)){
-                    if(this.directionFacing === 1){
-                        if(this.num === 1){ 
-                            this.setTexture('RedRight');
+                if (up.isDown || down.isDown && !this.player.body.blocked.down || (left.isDown && !right.isDown) || (!left.isDown && right.isDown)) {
+                    if (this.directionFacing === 1) {
+                        if (this.num === 1) {
+                            this.player.setTexture('RedRight');
                         }
-                        else{
-                            this.setTexture('BlueRight');
+                        else {
+                            this.player.setTexture('BlueRight');
                         }
 
                     }
-                    else if(this.directionFacing === -1){
-                        if(this.num === 1){
-                            this.setTexture('RedLeft');
-                            
+                    else if (this.directionFacing === -1) {
+                        if (this.num === 1) {
+                            this.player.setTexture('RedLeft');
+
                         }
-                        else{
-                            this.setTexture('BlueLeft');
+                        else {
+                            this.player.setTexture('BlueLeft');
                         }
                     }
                 }
 
-               */
-                
-                if (this.directionFacing === 1) {
-                    this.setFlipX(false);
-                } else {
-                    this.setFlipX(true);
-                }
+
+
+
 
                 //Jump
-                if (up.isDown && this.body.blocked.down) {
-                    this.setVelocityY(-500)
+                if (up.isDown && this.player.body.blocked.down) {
+                    this.player.setVelocityY(-500)
                 }
 
 
-            //Max horizontal speed
-            if(Math.abs(this.body.velocity.x) > 525){
-                this.setVelocityX(525 * Math.sign(this.body.velocity.x));
+                //Max horizontal speed
+                if (Math.abs(this.player.body.velocity.x) > 525) {
+                    this.player.setVelocityX(525 * Math.sign(this.player.body.velocity.x));
+                }
+
+
             }
 
-        
-        }
-        
-        getSprite(){
-            return this;
-        }
-        
-        getX(){
-            return this.x;
-        }
-        
-        getY(){
-            return this.y;
-        }
-        
-        getVelocityX(){
-            return this.body.velocity.x;
-        }
-        
-        getVelocityY(){
-            return this.body.velocity.y;
-        }
-        
-        getWidth(){
-            return this.body.width;
-        }
-        
-        getHeight(){
-            return this.body.height;
-        }
+            getSprite() {
+                return this.player;
+            }
+
+            getX() {
+                return this.player.x;
+            }
+
+            getY() {
+                return this.player.y;
+            }
+
+            getVelocityX() {
+                return this.player.body.velocity.x;
+            }
+
+            getVelocityY() {
+                return this.player.body.velocity.y;
+            }
+
+            getWidth() {
+                return this.player.body.width;
+            }
+
+            getHeight() {
+                return this.player.body.height;
+            }
 
             getLastKickTime() {
                 return this.lastKickTime;
             }
 
             getHeight() {
-                return this.body.height;
+                return this.player.body.height;
             }
 
             getWidth() {
-                return this.body.height;
+                return this.player.body.height;
             }
 
             setLastKickTime(n) {
@@ -871,20 +857,20 @@
             }
 
             setX(n) {
-                this.x = n;
+                this.player.x = n;
             }
 
-        setY(n){
-            this.y = n;
-        }
+            setY(n) {
+                this.player.y = n;
+            }
 
-        setVelocityX(velX){
-            this.body.velocity.x = velX
-        }
+            setVelocityX(velX) {
+                this.player.body.velocity.x = velX
+            }
 
-        setVelocityY(velY){
-            this.body.velocity.y = velY
-        }
+            setVelocityY(velY) {
+                this.player.body.velocity.y = velY
+            }
 
 
 
@@ -1070,29 +1056,12 @@
 
 
 
-        var playerAnimations = {};
-        var player2Animations = {};
-
-        var playerAnimations = {};
-        var player2Animations = {};
-
-
-            
-
-
-            
 
 
 
+        class PowerUpScene extends BaseScene {
 
-                
-
-
-        class PowerUpScene extends BaseScene
-        {
-
-            preload()
-            {
+            preload() {
                 super.preload();
             }
             create() {
