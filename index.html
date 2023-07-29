@@ -180,11 +180,13 @@ class HomeScene extends Phaser.Scene{
         this.load.image("RightGoal", "tiles/rightGoal.png");
         this.load.image("arrow", "mainMenu/arrow.png");
         this.load.audio("menuHover", "music/menuHover.wav");
+        this.load.image("back_button", "homeScreen/Back_button.png");
     }
     
     create(){
         const homeScreen = this.add.image(0,0,"HomeScreen").setOrigin(0);
         var mapButton = this.add.image(1000,604,"MapButton").setDepth(1);
+        let backButton = this.add.image(50,50,"back_button");
         
         var player1 = this.add.image(config.width / 2 - 100,500,"player_1");
         player1.setScale(9);
@@ -195,6 +197,23 @@ class HomeScene extends Phaser.Scene{
         leftGoal.setScale(2);
         var rightGoal = this.add.image(1092,480,"RightGoal").setDepth(0);
         rightGoal.setScale(2);
+        let back = this.add.text(backButton.x + 30,backButton.y/1.5, "Back",
+                          {fontSize: '32px', fill: '#000'}).setDepth(1);
+        
+        back.visible = false;
+        
+        backButton.setInteractive();       
+        backButton.on("pointerover",()=>{
+            back.visible = true;
+        }) 
+        backButton.on("pointerout",()=>{
+            back.visible = false;
+        }) 
+        backButton.on("pointerup",()=>{
+            //this.scene.start("TitleScene");
+            this.sound.stopByKey("titleMusic");
+            this.scene.switch("TitleScene")
+        }) 
 
         let hoverSprite = this.add.sprite(mapButton.x - mapButton.width / 1.5,604,"arrow").setDepth(3);
         hoverSprite.setScale(0.1);
@@ -243,7 +262,9 @@ class MapScene extends Phaser.Scene{
         }
         
     create(){
-        let rightClick = this.add.image(1052,this.game.renderer.height/2,"right_click");
+        var backButton = this.add.image(50,50,"back_button").setDepth(1);
+        let rightClick = this.
+        add.image(1052,this.game.renderer.height/2,"right_click");
         rightClick.setScale(0.1).setDepth(1);
         let leftClick = this.add.image(100,this.game.renderer.height/2, "left_click");
         leftClick.setScale(0.1).setDepth(1);
@@ -257,6 +278,22 @@ class MapScene extends Phaser.Scene{
         this.displayedImage = this.add.image(this.game.renderer.width/2,
                                              this.game.renderer.height/2,
                                              this.currentImage).setScale(0.6);
+
+        let back = this.add.text(backButton.x + 30,backButton.y/1.5, "Back",
+                          {fontSize: '32px', fill: '#000'}).setDepth(2);
+        
+        back.visible = false;
+        
+        backButton.setInteractive();       
+        backButton.on("pointerover",()=>{
+            back.visible = true;
+        }) 
+        backButton.on("pointerout",()=>{
+            back.visible = false;
+        }) 
+        backButton.on("pointerup",()=>{
+            this.scene.start("HomeScene");
+        }) 
         
         this.displayedImage.setInteractive();
         rightClick.on("pointerover",()=>{
@@ -756,7 +793,9 @@ class Previews{
 
                 this.load.image("tiles", "tiles/tilesheet_complete.png");
                 this.load.tilemapTiledJSON("grassyField", "tiles/defaultField.tmj");
-                this.load.image("GameOverButton", "mainMenu/playButton.png");
+                this.load.image("GameOverButton", "reloadScreen/restart_button.png");
+                this.load.image("gotohome_button", "reloadScreen/gotohome_button.png");
+                this.load.image("win_screen","reloadScreen/win_screen.png");
                 this.load.image("arrow", "mainMenu/arrow.png");
                 this.load.audio("menuHover", "music/menuHover.wav");
                 this.load.audio("menuSelect", "music/menuSelect.wav");
@@ -779,6 +818,7 @@ class Previews{
                 const sky = this.map.createLayer("Tile Layer 4", tileset);
                 const landscape = this.map.createLayer("Tile Layer 2", tileset);
                 const flowers = this.map.createLayer("Tile Layer 3", tileset);
+                this.load.image("win_screen","reloadScreen/win_screen.png");
                 this.startTime = this.time.now;
                 
                 //hoverSprite.setVisible(false);
@@ -921,7 +961,7 @@ class Previews{
                         else if (this.playerTwo.score > this.playerOne.score) {
                             this.gameOverText = this.add.text(config.width / 2 - 165, 150, 'Player 2 Wins!', { fontSize: '40px', fill: color });
                             this.gameOverText.setDepth(3);
-                ;                        }
+                                        }
                         else {
                             this.gameOverText = this.add.text(config.width / 2 - 130, 150, "It's a tie!", { fontSize: '40px', fill: color });
                             this.gameOverText.setDepth(3);
@@ -932,31 +972,66 @@ class Previews{
                         this.playerOne.getSprite().disableInteractive();
                         this.playerTwo.getSprite().disableInteractive();
                         this.soccerBall.getSprite().disableInteractive();
-                        let gameOverButton = this.add.image(this.game.renderer.width / 2,
-                            285, "GameOverButton").setDepth(2);
-                        let hoverSprite = this.add.sprite(config.width / 2, 100, "arrow").setDepth(3);
+                        let gameOverButton = this.add.image(this.game.renderer.width/2,
+                        285,"GameOverButton").setDepth(3).setScale(0.4);  
+                        let goHome = this.add.image(this.game.renderer.width/2,
+                                                390,
+                                            "gotohome_button").setDepth(3);
+                        let winScreen = this.add.image(this.game.renderer.width/2,
+                                                this.game.renderer.height/2,
+                                                "win_screen").setDepth(2);
+                        winScreen.setScale(0.4)
+                        goHome.setScale(0.4)
+                        
+                        let hoverSprite = this.add.sprite(100,100,"arrow").setDepth(3);
                         hoverSprite.setScale(0.1);
                         hoverSprite.setVisible(false);
-                        gameOverButton.setInteractive();
-                        gameOverButton.on("pointerover", () => {
+                        gameOverButton.setInteractive();        
+                        gameOverButton.on("pointerover",()=>{
+                            console.log("hover");
                             hoverSprite.setVisible(true);
-                            hoverSprite.x = gameOverButton.x - gameOverButton.width / 1.5;
+                            hoverSprite.x = gameOverButton.x-gameOverButton.width/4;
                             hoverSprite.y = gameOverButton.y;
                             this.sound.play("menuHover");
+                            
+                            
                         })
-                        gameOverButton.on("pointerout", () => {
+                        gameOverButton.on("pointerout",()=>{
                             hoverSprite.setVisible(false);
-                        })
-                        gameOverButton.on("pointerup", () => {
+                        })       
+                        gameOverButton.on("pointerup",()=>{
+                            this.sound.stopByKey("titleMusic");
                             this.sound.play("menuSelect");
-                            this.scene.start("TitleScene");
+                            this.scene.start("BaseScene");
+                            this.startTime = this.time.now;
 
-                    })
-                    }
+                        })
+                        
+                        goHome.setInteractive();
+                        goHome.on("pointerover",()=>{
+                            console.log("hover");
+                            hoverSprite.setVisible(true);
+                            hoverSprite.x = goHome.x - goHome.width/4;
+                            hoverSprite.y = goHome.y;
+                            this.sound.play("menuHover");  
+                        })        
+                        goHome.on("pointerout",()=>{
+                            hoverSprite.setVisible(false);
+                        })       
+                        goHome.on("pointerup",()=>{
+                            this.sound.stopByKey("titleMusic");
+                            this.sound.play("menuSelect");
+                            this.scene.start("HomeScene");
+
+                        })
 
                     
-                }
-
+                    }
+                }   
+            
+                 
+                
+                    
                 //Calculates the collsion with the player and the ball
                 calculateCollision(player, ball, playerNum, scene) {
                 let currentTime = scene.time.now;
@@ -965,6 +1040,7 @@ class Previews{
                     // If not, return immediately without kicking
                     return;
                 }
+            
 
                 //Kick code 
                 //Player should kick when ever the player moves into the ball
@@ -1029,7 +1105,7 @@ class Previews{
                     player.setLastKickTime(currentTime);
                     this.sound.play("kick");
                 }
-                }
+            }
 
                 update() {
                 //Movment & Controls
@@ -1038,7 +1114,8 @@ class Previews{
                     this.soccerBall.update();
 
                     //Update timer to count down from 2:00 to 0
-                    this.newTime = parseInt((121000 - (this.time.now - this.startTime)) / 1000);
+                    this.newTime = parseInt((5000 - (this.time.now - this.startTime)) / 1000);
+                    console.log(this.newTime);
 
                     //Timer display
                     if (this.newTime % 60 <= 9 && this.newTime % 60 >= 0) {
@@ -1073,7 +1150,7 @@ class Previews{
                         this.playerOne.play(player2Animations['right'], true);
                         console.log("p1 right");
                     }
-
+                }
 
                     }
 
@@ -1082,8 +1159,7 @@ class Previews{
 
 
 
-                }
-
+                
 
 
 
