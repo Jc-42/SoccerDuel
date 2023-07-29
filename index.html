@@ -333,21 +333,6 @@ class Previews{
     
 }
         
-class MoonScene extends Phaser.Scene{
-
-    preload(){
-        this.load.image("moon_view", "tiles/moonView.png");
-        this.load.image("Moon", "tiles/moon.png");
-    }
-    create(){
-        let moonBg = this.add.image(0,0,"moon_view").setOrigin(0);
-        let moon = this.add.image(0,0,"Moon").setOrigin(0);
-        moonBg.setScale(4);
-        moon.setScale(4);
-        
-    }
-}
-        
 
         
     class Player extends Phaser.Physics.Arcade.Sprite{
@@ -748,6 +733,7 @@ class MoonScene extends Phaser.Scene{
             startTime;
             gameOverText;
             returnToHomeButton; 
+            newTime;
 
             
 
@@ -901,7 +887,7 @@ class MoonScene extends Phaser.Scene{
                 this.physics.add.collider(this.playerTwo.getSprite(), this.rightGoal.getTopCollider(), null, null, this);
 
                 //Add collision between the ball and the walls and the player and the walls
-                for (this.i = 0; this.i < this.walls.length;this.i++) {
+                for (this.i = 0; this.i < this.walls.length; this.i++) {
                     this.physics.add.collider(playerOne.getSprite(), walls[i].getSprite());
                     this.physics.add.collider(playerTwo.getSprite(), walls[i].getSprite());
                     this.physics.add.collider(soccerBall.getSprite(), walls[i].getSprite());
@@ -910,15 +896,66 @@ class MoonScene extends Phaser.Scene{
                 this.cursors = this.input.keyboard.createCursorKeys();
                 this.keys = this.input.keyboard.addKeys('W, A, S, D');
 
-                this.playerOneScoreText = this.add.text(300, 30, '0', { fontSize: '60px', fill: '#000' });
-                this.playerTwoScoreText = this.add.text(config.width - 300, 30, '0', { fontSize: '60px', fill: '#000' });
-                this.timerText = this.add.text(config.width / 2 - 90 , 20, 'Time: ', {fontSize: '90px', fill: '#000'})
-                
-            }
+                this.setGUIColor('#000');
+                }
 
+                setGUIColor(color) {
+                    this.playerOneScoreText = this.add.text(300, 30, '0', { fontSize: '60px', fill: color });
+                    this.playerTwoScoreText = this.add.text(config.width - 300, 30, '0', { fontSize: '60px', fill: color });
+                    this.timerText = this.add.text(config.width / 2 - 90, 20, '', { fontSize: '90px', fill: color })
+                }
 
-            //Calculates the collsion with the player and the ball
-            calculateCollision(player, ball, playerNum, scene) {
+                endGame(color)
+                {
+                    if (this.newTime <= 0)
+                    {
+                        this.timerText.setText('0:00');
+
+                        if (this.playerOne.score > this.playerTwo.score) {
+                            this.gameOverText = this.add.text(config.width / 2 - 165, 150, 'Player 1 Wins!', { fontSize: '40px', fill: color });
+                            this.gameOverText.setDepth(3);
+                        }
+                        else if (this.playerTwo.score > this.playerOne.score) {
+                            this.gameOverText = this.add.text(config.width / 2 - 165, 150, 'Player 2 Wins!', { fontSize: '40px', fill: color });
+                            this.gameOverText.setDepth(3);
+                ;                        }
+                        else {
+                            this.gameOverText = this.add.text(config.width / 2 - 130, 150, "It's a tie!", { fontSize: '40px', fill: color });
+                            this.gameOverText.setDepth(3);
+                        }
+                        this.playerOne.getSprite().disableBody(true, false);
+                        this.playerTwo.getSprite().disableBody(true, false);
+                        this.soccerBall.getSprite().disableBody(true, false);
+                        this.playerOne.getSprite().disableInteractive();
+                        this.playerTwo.getSprite().disableInteractive();
+                        this.soccerBall.getSprite().disableInteractive();
+                        let gameOverButton = this.add.image(this.game.renderer.width / 2,
+                            285, "GameOverButton").setDepth(2);
+                        let hoverSprite = this.add.sprite(config.width / 2, 100, "arrow").setDepth(3);
+                        hoverSprite.setScale(0.1);
+                        hoverSprite.setVisible(false);
+                        gameOverButton.setInteractive();
+                        gameOverButton.on("pointerover", () => {
+                            hoverSprite.setVisible(true);
+                            hoverSprite.x = gameOverButton.x - gameOverButton.width / 1.5;
+                            hoverSprite.y = gameOverButton.y;
+                            this.sound.play("menuHover");
+                        })
+                        gameOverButton.on("pointerout", () => {
+                            hoverSprite.setVisible(false);
+                        })
+                        gameOverButton.on("pointerup", () => {
+                            this.sound.play("menuSelect");
+                            this.scene.start("TitleScene");
+
+                    })
+                    }
+
+                    
+                }
+
+                //Calculates the collsion with the player and the ball
+                calculateCollision(player, ball, playerNum, scene) {
                 let currentTime = scene.time.now;
                 // Check if enough time has passed since the last kick
                 if (currentTime - player.getLastKickTime() < 200) {
@@ -928,7 +965,7 @@ class MoonScene extends Phaser.Scene{
 
                 //Kick code 
                 //Player should kick when ever the player moves into the ball
-                
+
 
                 //Up and left kick
                 if (playerNum === 1 && this.cursors.up.isDown && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && this.keys.W.isDown && this.keys.A.isDown && ball.getX() - player.getX() <= 0) {
@@ -947,7 +984,7 @@ class MoonScene extends Phaser.Scene{
                 }
 
                 //Down and left kick
-                else if (playerNum === 1 && this.cursors.down.isDown && this.cursors.left.isDown && ball.getY() - player.getY() <= 0 && !player.getSprite().body.blocked.down || playerNum === 2 && this.keys.S.isDown && this.keys.A.isDown && ball.getY() - player.getY() <= 0 && !player.getSprite().body.blocked.down ) {
+                else if (playerNum === 1 && this.cursors.down.isDown && this.cursors.left.isDown && ball.getY() - player.getY() <= 0 && !player.getSprite().body.blocked.down || playerNum === 2 && this.keys.S.isDown && this.keys.A.isDown && ball.getY() - player.getY() <= 0 && !player.getSprite().body.blocked.down) {
                     ball.setVelocityY(700);
                     ball.setVelocityX(- 90 - (Math.abs(player.getVelocityX())));
                     player.setLastKickTime(currentTime);
@@ -963,20 +1000,19 @@ class MoonScene extends Phaser.Scene{
                 }
 
                 //Left straight kick
-                else if (playerNum === 1 && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 && this.cursors.right.isUp|| playerNum === 2 && this.keys.A.isDown && ball.getX() - player.getX() <= 0 && this.keys.D.isUp) {
+                else if (playerNum === 1 && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 && this.cursors.right.isUp || playerNum === 2 && this.keys.A.isDown && ball.getX() - player.getX() <= 0 && this.keys.D.isUp) {
                     ball.setVelocityX(-90 - (Math.abs(player.getVelocityX())));
                     player.setLastKickTime(currentTime);
                     this.sound.play("kick");
-                } 
-                
+                }
+
                 //Right straight kick
                 else if (playerNum === 1 && this.cursors.right.isDown && ball.getX() - player.getX() > 0 && this.cursors.left.isUp || playerNum === 2 && this.keys.D.isDown && this.keys.D.isDown && ball.getX() - player.getX() > 0 && this.keys.A.isUp) {
-                    ball.setVelocityX(90 + (Math.abs(player.getVelocityX()))); 
+                    ball.setVelocityX(90 + (Math.abs(player.getVelocityX())));
                     player.setLastKickTime(currentTime);
-                    console.log("kicked right");
                     this.sound.play("kick");
                 }
-                
+
                 //Up kick
                 else if (playerNum === 1 && this.cursors.up.isDown || playerNum === 2 && this.keys.W.isDown) {
                     ball.setVelocityY(-90 - (Math.abs(player.getVelocityY() * 2)));
@@ -990,69 +1026,28 @@ class MoonScene extends Phaser.Scene{
                     player.setLastKickTime(currentTime);
                     this.sound.play("kick");
                 }
-            }
+                }
 
-            update() {
+                update() {
                 //Movment & Controls
                 this.playerOne.update(this.cursors.up, this.cursors.left, this.cursors.down, this.cursors.right);
                 this.playerTwo.update(this.keys.W, this.keys.A, this.keys.S, this.keys.D);
                 this.soccerBall.update();
 
                 //Update timer to count down from 2:00 to 0
-                let newTime = parseInt((121000 - (this.time.now - this.startTime)) / 1000);
+                this.newTime = parseInt((121000 - (this.time.now - this.startTime)) / 1000);
 
                 //Timer display
-                if(newTime % 60 <= 9 && newTime % 60 >= 0){
-                    this.timerText.setText(parseInt(newTime / 60) + ':0' + newTime % 60);
+                if (this.newTime % 60 <= 9 && this.newTime % 60 >= 0) {
+                    this.timerText.setText(parseInt(this.newTime / 60) + ':0' + this.newTime % 60);
                 }
-                else if (newTime % 60 > 9 && newTime >= 0){
-                    this.timerText.setText(parseInt(newTime / 60) + ':' + newTime % 60); 
+                else if (this.newTime % 60 > 9 && this.newTime >= 0) {
+                    this.timerText.setText(parseInt(this.newTime / 60) + ':' + this.newTime % 60);
                 }
-                else{
-                    this.timerText.setText('0:00');
 
-                    if (this.playerOne.score > this.playerTwo.score)
-                    {
-                        this.gameOverText = this.add.text(config.width / 2 - 160, 100, 'Player 1 Wins!', { fontSize: '40px', fill: '#000' })
-                    }
-                    else if (this.playerTwo.score > this.playerOne.score)
-                    {
-                        this.gameOverText = this.add.text(config.width / 2 - 160, 100, 'Player 2 Wins!', { fontSize: '40px', fill: '#000' })
-                    }
-                    else
-                    {
-                        this.gameOverText = this.add.text(config.width / 2 - 135, 100, "It's a tie!", { fontSize: '40px', fill: '#000' })
-                    }
-                    
-                    this.sound.stopByKey("titleMusic");
-                    this.playerOne.getSprite().disableBody(true, false);
-                    this.playerTwo.getSprite().disableBody(true, false);
-                    this.soccerBall.getSprite().disableBody(true, false);
-                    this.playerOne.getSprite().disableInteractive();
-                    this.playerTwo.getSprite().disableInteractive();
-                    this.soccerBall.getSprite().disableInteractive();
-                    let gameOverButton = this.add.image(this.game.renderer.width/2,
-                    285,"GameOverButton").setDepth(2);  
-                    let hoverSprite = this.add.sprite(config.width / 2,100,"arrow").setDepth(3);
-                    hoverSprite.setScale(0.1);
-                    hoverSprite.setVisible(false);
-                    gameOverButton.setInteractive();        
-                    gameOverButton.on("pointerover",()=>{
-                        hoverSprite.setVisible(true);
-                        hoverSprite.x = gameOverButton.x - gameOverButton.width/1.5;
-                        hoverSprite.y = gameOverButton.y;
-                        this.sound.play("menuHover");  
-                    })        
-                    gameOverButton.on("pointerout",()=>{
-                        hoverSprite.setVisible(false);
-                    })       
-                    gameOverButton.on("pointerup",()=>{
-                        this.sound.play("menuSelect");
-                        this.scene.start("TitleScene");
+                //Ends game
 
-                    })
-                }
-                
+                this.endGame('#000');
 
                 //Set up animation controls
                 
@@ -1075,9 +1070,64 @@ class MoonScene extends Phaser.Scene{
                     this.playerOne.play(player2Animations['right'], true);
                     console.log("p1 right");
                 }
+
+
+                }
+
+
+
+
+
+
+                }
+
+
+
+
+                class MoonScene extends BaseScene {
+
+                preload() {
+                    super.preload();
+                    this.load.image("moon_view", "tiles/moonView.png");
+                    this.load.image("Moon", "tiles/moon.png");
+                }
+                create() {
+                    super.create();
+                    super.setGUIColor('#FFF');
+                    let moonBg = this.add.image(0, 0, "moon_view").setOrigin(0);
+                    let moon = this.add.image(0, 0, "Moon").setOrigin(0);
+                    moonBg.setScale(4);
+                    moon.setScale(4);
+                    let base = this.scene.get('BaseScene');
+                    this.ground.setDepth(1);
+                    moonBg.setDepth(2);
+                    this.playerOne.getSprite().setDepth(3);
+                    this.playerTwo.getSprite().setDepth(3);
+                    this.soccerBall.getSprite().setDepth(3);
+                    this.leftGoal.getSprite().setDepth(3);
+                    this.rightGoal.getSprite().setDepth(3);
+                    this.playerOneScoreText.setDepth(3);
+                    this.playerTwoScoreText.setDepth(3);
+                    this.timerText.setDepth(3);
+                    this.physics.world.gravity.y = 500;
+
+
+
+
+
+                }
+                update() {
+                    super.update();
+                    super.endGame('#FFF');
+                }
+                }
+            
                 
-            }
-        }
+
+                
+                
+            
+        
 
 
         class PowerUpScene extends BaseScene
@@ -1131,3 +1181,6 @@ class MoonScene extends Phaser.Scene{
 </body>
 
 </html>
+
+
+
