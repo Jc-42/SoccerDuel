@@ -398,7 +398,9 @@ class Previews{
         update(up, left, down, right){
 
                 
-
+                if(this.body.y > config.height - 104){
+                    this.body.y = config.height - 104;
+                }
                 //Slowdown when not pressing anything or pressing oposite movement
                 if (left.isDown && right.isDown || !left.isDown && !right.isDown) {
 
@@ -410,7 +412,7 @@ class Previews{
                     }
 
                     //Grey player out by default
-                    
+                    /*
                     if(this.directionFacing === 1){
                         if(this.num === 1){ 
                             this.setTexture('RedGreyRight');
@@ -428,8 +430,13 @@ class Previews{
                         else{
                             this.setTexture('BlueGreyLeft');
                         }
-                    }
-                    
+                    }*/
+                    if(this.num === 1){ 
+                            this.setTexture('RedGreyRight');
+                        }
+                        else{
+                            this.setTexture('BlueGreyRight');
+                        }
 
                 }
 
