@@ -179,7 +179,6 @@ class HomeScene extends Phaser.Scene{
         this.load.image("LeftGoal", "tiles/leftGoal.png");
         this.load.image("RightGoal", "tiles/rightGoal.png");
         this.load.image("arrow", "mainMenu/arrow.png");
-        this.load.audio("menuHover", "music/menuHover.wav");
         this.load.image("back_button", "homeScreen/Back_button.png");
     }
     
@@ -306,15 +305,13 @@ class MapScene extends Phaser.Scene{
             }
             else if(this.currentImage === "moon_preview"){
                 this.scene.start("MoonScene");
+                this.sound.stopByKey("titleMusic");
             }
         })
         
         rightClick.setInteractive();       
         rightClick.on("pointerover",()=>{
-        })     
-//        rightClick.on("pointerout",()=>{
-//            console.log("out");
-//        })        
+        })         
         rightClick.on("pointerup",()=>{
             this.sound.play("menuSelect");
             if (this.currentMap >= this.maps.length-1) {
@@ -325,14 +322,7 @@ class MapScene extends Phaser.Scene{
             
             this.currentImage = this.maps[this.currentMap];
             this.displayedImage.setTexture(this.currentImage);
-                //= this.add.image(this.game.renderer.width/2, 
-                //                                 this.game.renderer.height/2, 
-                //                                 this.currentImage).setScale(0.4);
-            
-//            console.log("Open game")
-//            this.sound.play("menuSelect");
-//            i++;
-   //         this.scene.start("mapScene");
+
         })
         
         
@@ -353,23 +343,7 @@ class MapScene extends Phaser.Scene{
         })
         
     }
-}
-    
-    
-    
-
-
-
-class Previews{
-    constructor(x,y,frame){
-    this.preview = scene.physics.add.image(x, y, frame);        
-    }
-    getSprite(){
-        return this.preview;
-    }
-    
-}
-        
+}   
 
         
     class Player extends Phaser.Physics.Arcade.Sprite{
@@ -398,9 +372,7 @@ class Previews{
         update(up, left, down, right){
 
                 
-                if(this.body.y > config.height - 104){
-                    this.body.y = config.height - 104;
-                }
+
                 //Slowdown when not pressing anything or pressing oposite movement
                 if (left.isDown && right.isDown || !left.isDown && !right.isDown) {
 
@@ -412,7 +384,7 @@ class Previews{
                     }
 
                     //Grey player out by default
-                    /*
+                    
                     if(this.directionFacing === 1){
                         if(this.num === 1){ 
                             this.setTexture('RedGreyRight');
@@ -430,13 +402,8 @@ class Previews{
                         else{
                             this.setTexture('BlueGreyLeft');
                         }
-                    }*/
-                    if(this.num === 1){ 
-                            this.setTexture('RedGreyRight');
-                        }
-                        else{
-                            this.setTexture('BlueGreyRight');
-                        }
+                    }
+                    
 
                 }
 
@@ -745,18 +712,8 @@ class Previews{
             }
         }
 
-        /*
-        class Powerup()
-        {
-            constructor(x, y, scene)
-            {
-                this.powerup = scene.add.physics(x, y);
-            }
-        }
-        */
 
-
-
+        var currentMap;
         var playerAnimations = {};
         var player2Animations = {};
 
@@ -803,13 +760,11 @@ class Previews{
                 this.load.image("GameOverButton", "reloadScreen/restart_button.png");
                 this.load.image("gotohome_button", "reloadScreen/gotohome_button.png");
                 this.load.image("win_screen","reloadScreen/win_screen.png");
-                this.load.image("arrow", "mainMenu/arrow.png");
-                this.load.audio("menuHover", "music/menuHover.wav");
-                this.load.audio("menuSelect", "music/menuSelect.wav");
                 
 
                 this.load.audio("kick", "sfx/Kick.wav");
-                this.load.audio("goal", "sfx/Goal.wav")
+                this.load.audio("goal", "sfx/Goal.wav");
+                this.load.audio("moonTheme", "music/moonTheme.mp3")
 
                 this.load.atlas('players', 'Sprites/playersprites.png', 'Sprites/playersprites.json');
                 //this.load.atlas('player', 'Sprites/player000spritesheet.png', 'Sprites/player000spritesheet.json');
@@ -827,6 +782,7 @@ class Previews{
                 const flowers = this.map.createLayer("Tile Layer 3", tileset);
                 this.load.image("win_screen","reloadScreen/win_screen.png");
                 this.startTime = this.time.now;
+                currentMap = "baseScene";
                 
                 //hoverSprite.setVisible(false);
                 
@@ -836,8 +792,13 @@ class Previews{
                 //Player one animations
                 
                 //var idle = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('player', {prefix: 'player0', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
-                var righta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('players', {prefix: 'playerrunningright0', end: 8, zeroPad: 2}), repeat: -1, frameRate: 10});
-                var lefta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('players', {prefix: 'playerrunningleft0', start: 9, end: 16, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var righta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('players', 
+                                                                                                     {prefix: 'playerrunningright0',
+                                                                                                      end: 8, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var lefta = this.anims.create({key: 'player', frames: this.anims.generateFrameNames('players', 
+                                                                                                    {prefix: 'playerrunningleft0',
+                                                                                                    start: 9, end: 16, zeroPad: 2}),
+                                                                                                    repeat: -1, frameRate: 10});
                 //playerAnimations['idle'] = idle;
                 playerAnimations['right'] = righta;
                 playerAnimations['left'] = lefta;
@@ -845,20 +806,19 @@ class Previews{
 
                 //Player two animations
                 //var idle2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('player2', {prefix: 'player1', suffix: '.png', end: 5, zeroPad: 2}), repeat: -1, frameRate: 10});
-                var righta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('players', {prefix: 'playerrunningright1', end: 8, zeroPad: 2}), repeat: -1, frameRate: 10});
-                var lefta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('players', {prefix: 'playerrunningleft1', start: 9, end: 16, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var righta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('players',
+                                                                                                       {prefix: 'playerrunningright1',
+                                                                                                        end: 8, zeroPad: 2}), repeat: -1, frameRate: 10});
+                var lefta2 = this.anims.create({key: 'player2', frames: this.anims.generateFrameNames('players', 
+                                                                                                      {prefix: 'playerrunningleft1',
+                                                                                                       start: 9, end: 16, zeroPad: 2}),
+                                                                                                        repeat: -1, frameRate: 10});
                 //player2Animations['idle'] = idle2;
                 player2Animations['right'] = righta2;
                 player2Animations['left'] = lefta2;
                 
                 this.ground.setCollision(201);
                 
-                //let background = this.add.image(1152 / 2, 648 / 2, 'Background');
-                //background.setScale(.6);
-
-
-                
-
 
                 // Create playerOne instance of Player class
                 this.playerOne = new Player(config.width * .75, 100, this, 1, 'player', playerAnimations);
@@ -881,7 +841,7 @@ class Previews{
 
                 //Ball collision with the goals
                 this.physics.add.collider(this.leftGoal.getSprite(), this.soccerBall.getSprite(), function (goal, ball) { }, function (goal, ball) {
-                    if (Math.abs(this.soccerBall.getX() - this.leftGoal.getX()) < 35) {
+                    if (Math.abs(this.soccerBall.getX() - this.leftGoal.getX()) < 25) {
                         ball.setX(config.width / 2);
                         ball.setY(0);
                         ball.setVelocityX(0);
@@ -902,7 +862,7 @@ class Previews{
                 }, this);
 
                 this.physics.add.collider(this.rightGoal.getSprite(), this.soccerBall.getSprite(), function (goal, ball) { }, function (goal, ball) {
-                    if (Math.abs(this.soccerBall.getX() - this.rightGoal.getX()) < 35) {
+                    if (Math.abs(this.soccerBall.getX() - this.rightGoal.getX()) < 25) {
                         ball.setX(config.width / 2);
                         ball.setY(0);
                         ball.setVelocityX(0);
@@ -962,16 +922,16 @@ class Previews{
                         this.timerText.setText('0:00');
 
                         if (this.playerOne.score > this.playerTwo.score) {
-                            this.gameOverText = this.add.text(config.width / 2 - 165, 150, 'Player 1 Wins!', { fontSize: '40px', fill: color });
-                            this.gameOverText.setDepth(3);
+                            this.gameOverText = this.add.text(config.width / 2 - 125, 150, 'Player 1 Wins!', { fontSize: '30px', fill: color });
+                            this.gameOverText.setDepth(4);
                         }
                         else if (this.playerTwo.score > this.playerOne.score) {
-                            this.gameOverText = this.add.text(config.width / 2 - 165, 150, 'Player 2 Wins!', { fontSize: '40px', fill: color });
-                            this.gameOverText.setDepth(3);
+                            this.gameOverText = this.add.text(config.width / 2 - 125, 150, 'Player 2 Wins!', { fontSize: '30px', fill: color });
+                            this.gameOverText.setDepth(4);
                                         }
                         else {
-                            this.gameOverText = this.add.text(config.width / 2 - 130, 150, "It's a tie!", { fontSize: '40px', fill: color });
-                            this.gameOverText.setDepth(3);
+                            this.gameOverText = this.add.text(config.width / 2 - 100, 150, "It's a tie!", { fontSize: '30px', fill: color });
+                            this.gameOverText.setDepth(4);
                         }
                         this.playerOne.getSprite().disableBody(true, false);
                         this.playerTwo.getSprite().disableBody(true, false);
@@ -980,36 +940,39 @@ class Previews{
                         this.playerTwo.getSprite().disableInteractive();
                         this.soccerBall.getSprite().disableInteractive();
                         let gameOverButton = this.add.image(this.game.renderer.width/2,
-                        285,"GameOverButton").setDepth(3).setScale(0.4);  
+                        285,"GameOverButton").setDepth(4).setScale(0.4);  
                         let goHome = this.add.image(this.game.renderer.width/2,
                                                 390,
-                                            "gotohome_button").setDepth(3);
+                                            "gotohome_button").setDepth(4);
                         let winScreen = this.add.image(this.game.renderer.width/2,
                                                 this.game.renderer.height/2,
-                                                "win_screen").setDepth(2);
+                                                "win_screen").setDepth(3);
                         winScreen.setScale(0.4)
                         goHome.setScale(0.4)
                         
-                        let hoverSprite = this.add.sprite(100,100,"arrow").setDepth(3);
+                        let hoverSprite = this.add.sprite(100,100,"arrow").setDepth(4);
                         hoverSprite.setScale(0.1);
                         hoverSprite.setVisible(false);
                         gameOverButton.setInteractive();        
                         gameOverButton.on("pointerover",()=>{
-                            console.log("hover");
                             hoverSprite.setVisible(true);
                             hoverSprite.x = gameOverButton.x-gameOverButton.width/4;
                             hoverSprite.y = gameOverButton.y;
-                            this.sound.play("menuHover");
-                            
+                            //this.sound.play("menuHover");                           
                             
                         })
                         gameOverButton.on("pointerout",()=>{
                             hoverSprite.setVisible(false);
                         })       
                         gameOverButton.on("pointerup",()=>{
-                            this.sound.stopByKey("titleMusic");
                             this.sound.play("menuSelect");
-                            this.scene.start("BaseScene");
+                            if(currentMap === "baseScene"){
+                                this.scene.start("BaseScene")
+                            }
+                            if(currentMap === "moonScene"){
+                                this.sound.stopByKey("moonTheme");
+                                this.scene.start("MoonScene");
+                            }
                             this.startTime = this.time.now;
 
                         })
@@ -1020,15 +983,18 @@ class Previews{
                             hoverSprite.setVisible(true);
                             hoverSprite.x = goHome.x - goHome.width/4;
                             hoverSprite.y = goHome.y;
-                            this.sound.play("menuHover");  
+                            //this.sound.play("menuHover");  
                         })        
                         goHome.on("pointerout",()=>{
                             hoverSprite.setVisible(false);
                         })       
                         goHome.on("pointerup",()=>{
-                            this.sound.stopByKey("titleMusic");
                             this.sound.play("menuSelect");
                             this.scene.start("HomeScene");
+                            if(currentMap === "moonScene"){
+                                this.sound.stopByKey("moonTheme");
+                                this.sound.play("titleMusic");
+                            }
 
                         })
 
@@ -1122,7 +1088,7 @@ class Previews{
 
                     //Update timer to count down from 2:00 to 0
                     this.newTime = parseInt((121000 - (this.time.now - this.startTime)) / 1000);
-                    console.log(this.newTime);
+                    //console.log(this.newTime);
 
                     //Timer display
                     if (this.newTime % 60 <= 9 && this.newTime % 60 >= 0) {
@@ -1179,6 +1145,8 @@ class Previews{
                 }
                 create() {
                     super.create();
+                    currentMap = "moonScene";
+                    this.sound.play("moonTheme");
                     super.setGUIColor('#FFF');
                     let moonBg = this.add.image(0, 0, "moon_view").setOrigin(0);
                     let moon = this.add.image(0, 0, "Moon").setOrigin(0);
@@ -1267,6 +1235,3 @@ class Previews{
 </body>
 
 </html>
-
-
-
