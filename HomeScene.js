@@ -49,12 +49,10 @@ class HomeScene extends Phaser.Scene {
 
         mapButton.setInteractive();
         mapButton.on("pointerover", () => {
-            console.log("hover");
             hoverSprite.setVisible(true);
             this.sound.play("menuHover");
         })
         mapButton.on("pointerout", () => {
-            console.log("out");
             hoverSprite.setVisible(false);
         })
         mapButton.on("pointerup", () => {

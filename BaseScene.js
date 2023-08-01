@@ -278,7 +278,6 @@ class BaseScene extends Phaser.Scene {
 
             goHome.setInteractive();
             goHome.on("pointerover", () => {
-                console.log("hover");
                 hoverSprite.setVisible(true);
                 hoverSprite.x = goHome.x - goHome.width / 4;
                 hoverSprite.y = goHome.y;
@@ -391,7 +390,6 @@ class BaseScene extends Phaser.Scene {
 
         //Update timer to count down from 2:00 to 0
         this.newTime = parseInt((121000 - (this.time.now - this.startTime)) / 1000);
-        //console.log(this.newTime);
 
         //Timer display
         if (this.newTime % 60 <= 9 && this.newTime % 60 >= 0) {
