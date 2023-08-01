@@ -3,15 +3,15 @@ class TitleScene extends Phaser.Scene {
 
     preload() {
         //menu screen
-        this.load.image("title_bg", "mainMenu/title_bg.png");
-        this.load.image("credit_button", "mainMenu/creditButton.png");
-        this.load.image("play_button", "mainMenu/playButton.png");
-        this.load.image("settings_button", "mainMenu/settingsButton.png");
-        this.load.image("arrow", "mainMenu/arrow.png");
+        this.load.image("title_bg", "Assets/mainMenu/title_bg.png");
+        this.load.image("credit_button", "Assets/mainMenu/creditButton.png");
+        this.load.image("play_button", "Assets/mainMenu/playButton.png");
+        this.load.image("settings_button", "Assets/mainMenu/settingsButton.png");
+        this.load.image("arrow", "Assets/mainMenu/arrow.png");
 
-        this.load.audio("titleMusic", "music/menuTheme.wav");
-        this.load.audio("menuSelect", "music/menuSelect.wav");
-        this.load.audio("menuHover", "music/menuHover.wav");
+        this.load.audio("titleMusic", "Assets/music/menuTheme.wav");
+        this.load.audio("menuSelect", "Assets/music/menuSelect.wav");
+        this.load.audio("menuHover", "Assets/music/menuHover.wav");
 
         //create loadingbar
         let loadingBar = this.add.graphics({

@@ -22,34 +22,34 @@ class BaseScene extends Phaser.Scene {
 
 
     preload() {
-        this.load.image('RedRight', 'Sprites/redRight.png');
-        this.load.image('RedLeft', 'Sprites/redLeft.png');
-        this.load.image('BlueRight', 'Sprites/blueRight.png');
-        this.load.image('BlueLeft', 'Sprites/blueLeft.png');
-        this.load.image('SoccerBall', 'Sprites/Soccer_Ball-1.png');
-        this.load.image('Background', 'Sprites/Background.png');
-        this.load.image('RightGoal', 'Sprites/Right_Goal.png');
-        this.load.image('LeftGoal', 'Sprites/Left_Goal.png');
+        this.load.image('RedRight', 'Assets/Sprites/redRight.png');
+        this.load.image('RedLeft', 'Assets/Sprites/redLeft.png');
+        this.load.image('BlueRight', 'Assets/Sprites/blueRight.png');
+        this.load.image('BlueLeft', 'Assets/Sprites/blueLeft.png');
+        this.load.image('SoccerBall', 'Assets/Sprites/Soccer_Ball-1.png');
+        this.load.image('Background', 'Assets/Sprites/Background.png');
+        this.load.image('RightGoal', 'Assets/Sprites/Right_Goal.png');
+        this.load.image('LeftGoal', 'Assets/Sprites/Left_Goal.png');
 
-        this.load.image('BlueGreyRight', 'Sprites/blueGreyRight.png');
-        this.load.image('BlueGreyLeft', 'Sprites/blueGreyLeft.png');
-        this.load.image('RedGreyRight', 'Sprites/redGreyRight.png');
-        this.load.image('RedGreyLeft', 'Sprites/redGreyLeft.png');
+        this.load.image('BlueGreyRight', 'Assets/Sprites/blueGreyRight.png');
+        this.load.image('BlueGreyLeft', 'Assets/Sprites/blueGreyLeft.png');
+        this.load.image('RedGreyRight', 'Assets/Sprites/redGreyRight.png');
+        this.load.image('RedGreyLeft', 'Assets/Sprites/redGreyLeft.png');
 
-        this.load.image("tiles", "tiles/tilesheet_complete.png");
-        this.load.tilemapTiledJSON("grassyField", "tiles/defaultField.tmj");
-        this.load.image("GameOverButton", "reloadScreen/restart_button.png");
-        this.load.image("gotohome_button", "reloadScreen/gotohome_button.png");
-        this.load.image("win_screen", "reloadScreen/win_screen.png");
+        this.load.image("tiles", "Assets/tiles/tilesheet_complete.png");
+        this.load.tilemapTiledJSON("grassyField", "Assets/tiles/defaultField.tmj");
+        this.load.image("GameOverButton", "Assets/reloadScreen/restart_button.png");
+        this.load.image("gotohome_button", "Assets/reloadScreen/gotohome_button.png");
+        this.load.image("win_screen", "Assets/reloadScreen/win_screen.png");
 
 
-        this.load.audio("kick", "sfx/Kick.wav");
-        this.load.audio("goal", "sfx/Goal.wav");
-        this.load.audio("moonTheme", "music/moonTheme.mp3")
+        this.load.audio("kick", "Assets/sfx/Kick.wav");
+        this.load.audio("goal", "sfx/GoalAssets/.wav");
+        this.load.audio("moonTheme", "Assets/music/moonTheme.mp3")
 
-        this.load.atlas('players', 'Sprites/playersprites.png', 'Sprites/playersprites.json');
-        //this.load.atlas('player', 'Sprites/player000spritesheet.png', 'Sprites/player000spritesheet.json');
-        //this.load.atlas('player2', 'Sprites/player100spritesheet.png', 'Sprites/player100spritesheet.json');
+        this.load.atlas('players', 'Assets/Sprites/playersprites.png', 'Assets/Sprites/playersprites.json');
+        //this.load.atlas('player', 'Assets/Sprites/player000spritesheet.png', 'Assets/Sprites/player000spritesheet.json');
+        //this.load.atlas('player2', 'Assets/Sprites/player100spritesheet.png', 'Assets/Sprites/player100spritesheet.json');
     }
 
     create() {
@@ -61,7 +61,7 @@ class BaseScene extends Phaser.Scene {
         const sky = this.map.createLayer("Tile Layer 4", tileset);
         const landscape = this.map.createLayer("Tile Layer 2", tileset);
         const flowers = this.map.createLayer("Tile Layer 3", tileset);
-        this.load.image("win_screen", "reloadScreen/win_screen.png");
+        this.load.image("win_screen", "Assets/reloadScreen/win_screen.png");
         this.startTime = this.time.now;
         currentMap = "baseScene";
 

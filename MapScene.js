@@ -5,11 +5,11 @@ class MapScene extends Phaser.Scene {
     displayedImage;
 
     preload() {
-        this.load.image("right_click", "maps/Right_click.png");
-        this.load.image("left_click", "maps/Left_click.png");
-        this.load.image("default_preview", "maps/Default_preview.png");
-        this.load.image("moon_preview", "maps/moon_preview.png");
-        this.load.image("yellow_bg", "maps/yellow_bg.png");
+        this.load.image("right_click", "Assets/maps/Right_click.png");
+        this.load.image("left_click", "Assets/maps/Left_click.png");
+        this.load.image("default_preview", "Assets/maps/Default_preview.png");
+        this.load.image("moon_preview", "Assets/maps/moon_preview.png");
+        this.load.image("yellow_bg", "Assets/maps/yellow_bg.png");
     }
 
     create() {

@@ -1,14 +1,14 @@
 class HomeScene extends Phaser.Scene {
 
     preload() {
-        this.load.image("HomeScreen", "homeScreen/home_bg.png");
-        this.load.image("MapButton", "homeScreen/mapButton.png");
-        this.load.image('player_1', 'Sprites/blueRight.png');
-        this.load.image('player_2', 'Sprites/redLeft.png');
-        this.load.image("LeftGoal", "tiles/leftGoal.png");
-        this.load.image("RightGoal", "tiles/rightGoal.png");
-        this.load.image("arrow", "mainMenu/arrow.png");
-        this.load.image("back_button", "homeScreen/Back_button.png");
+        this.load.image("HomeScreen", "Assets/homeScreen/home_bg.png");
+        this.load.image("MapButton", "Assets/homeScreen/mapButton.png");
+        this.load.image('player_1', 'Assets/Sprites/blueRight.png');
+        this.load.image('player_2', 'Assets/Sprites/redLeft.png');
+        this.load.image("LeftGoal", "Assets/tiles/leftGoal.png");
+        this.load.image("RightGoal", "Assets/tiles/rightGoal.png");
+        this.load.image("arrow", "Assets/mainMenu/arrow.png");
+        this.load.image("back_button", "Assets/homeScreen/Back_button.png");
     }
 
     create() {

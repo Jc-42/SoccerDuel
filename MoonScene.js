@@ -2,8 +2,8 @@ class MoonScene extends BaseScene {
 
     preload() {
         super.preload();
-        this.load.image("moon_view", "tiles/moonView.png");
-        this.load.image("Moon", "tiles/moon.png");
+        this.load.image("moon_view", "Assets/tiles/moonView.png");
+        this.load.image("Moon", "Assets/tiles/moon.png");
     }
     create() {
         super.create();
