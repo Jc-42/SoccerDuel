@@ -406,25 +406,42 @@ class BaseScene extends Phaser.Scene {
 
         //Set up animation controls
 
-        if (this.cursors.left.isDown) {
+        
+        //Stop animations if player isnt moving
+        if(!this.cursors.left.isDown && !this.cursors.right.isDown || this.cursors.left.isDown && this.cursors.right.isDown ){
+            this.playerTwo.anims.stop();
+        }
+
+        else if (this.cursors.left.isDown) {
+            this.playerTwo.anims.stop();
             this.playerTwo.play(player2Animations['left'], true);
             console.log("p2 left");
         } 
         
         else if (this.cursors.right.isDown) {
+            this.playerTwo.anims.stop();
             this.playerTwo.play(player2Animations['right'], true);
             console.log("p2 right");
         }
 
-        if (this.keys.A.isDown) {
+        //Stop animations if player isnt moving
+        if(!this.keys.A.isDown && !this.keys.D.isDown || this.keys.A.isDown && this.keys.D.isDown){
+            this.playerOne.anims.stop();
+        }
+
+        else if (this.keys.A.isDown) {
+            this.playerTwo.anims.stop();
             this.playerOne.play(playerAnimations['left'], true);
             console.log("p1 left");
         }
         
         else if (this.keys.D.isDown) {
+            this.playerTwo.anims.stop();
             this.playerOne.play(playerAnimations['right'], true);
             console.log("p1 right");
         }
+
+       
     }
 
 }
