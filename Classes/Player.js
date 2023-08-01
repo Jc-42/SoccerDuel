@@ -39,20 +39,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
             if (this.directionFacing === 1) {
                 if (this.num === 1) {
-                    this.setTexture('RedGreyRight');
+                    this.setTexture('BlueGreyRight');
                 }
                 else {
-                    this.setTexture('BlueGreyRight');
+                    this.setTexture('RedGreyRight');
                 }
 
             }
             else if (this.directionFacing === -1) {
                 if (this.num === 1) {
-                    this.setTexture('RedGreyLeft');
+                    this.setTexture('BlueGreyLeft');
 
                 }
                 else {
-                    this.setTexture('BlueGreyLeft');
+                    this.setTexture('RedGreyLeft');
                 }
             }
 

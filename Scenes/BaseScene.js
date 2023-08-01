@@ -85,8 +85,7 @@ class BaseScene extends Phaser.Scene {
                 {
                     prefix: 'playerrunningleft0',
                     start: 9, end: 16, zeroPad: 2
-                }),
-            repeat: -1, frameRate: 10
+                }), repeat: -1, frameRate: 10
         });
         //playerAnimations['idle'] = idle;
         playerAnimations['right'] = righta;
@@ -118,8 +117,8 @@ class BaseScene extends Phaser.Scene {
 
 
         // Create playerOne instance of Player class
-        this.playerOne = new Player(config.width * .75, 100, this, 1, 'player', playerAnimations);
-        this.playerTwo = new Player(config.width / 4, 100, this, 2, 'player', player2Animations);
+        this.playerOne = new Player(config.width / 4, 100, this, 1, 'player', playerAnimations);
+        this.playerTwo = new Player(config.width * .75, 100, this, 2, 'player', player2Animations);
         this.soccerBall = new Ball(config.width / 2, 0, this);
         this.leftGoal = new Goal(7, 553, 'LeftGoal', this);
         this.rightGoal = new Goal(config.width - 3, 553, 'RightGoal', this);
@@ -322,7 +321,7 @@ class BaseScene extends Phaser.Scene {
 
 
         //Up and left kick
-        if (playerNum === 1 && this.cursors.up.isDown && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && this.keys.W.isDown && this.keys.A.isDown && ball.getX() - player.getX() <= 0) {
+        if (playerNum === 1 && this.keys.W.isDown && this.keys.A.isDown && ball.getX() - player.getX() <= 0 || playerNum === 2 && this.cursors.up.isDown && this.cursors.left.isDown && ball.getX() - player.getX() <= 0) {
             ball.setVelocityY(-700);
             ball.setVelocityX(- 90 - (Math.abs(player.getVelocityX())));
             player.setLastKickTime(currentTime);
@@ -330,7 +329,7 @@ class BaseScene extends Phaser.Scene {
         }
 
         //Up and right kick
-        else if (playerNum === 1 && this.cursors.up.isDown && this.cursors.right.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && this.keys.W.isDown && this.keys.D.isDown && ball.getX() - player.getX() > 0) {
+        else if (playerNum === 1 && this.keys.W.isDown && this.keys.D.isDown && ball.getX() - player.getX() > 0 || playerNum === 2 && this.cursors.up.isDown && this.cursors.right.isDown && ball.getX() - player.getX() > 0) {
             ball.setVelocityY(-700);
             ball.setVelocityX(90 + (Math.abs(player.getVelocityX())));
             player.setLastKickTime(currentTime);
@@ -338,7 +337,7 @@ class BaseScene extends Phaser.Scene {
         }
 
         //Down and left kick
-        else if (playerNum === 1 && this.cursors.down.isDown && this.cursors.left.isDown && ball.getY() - player.getY() <= 0 && !player.getSprite().body.blocked.down || playerNum === 2 && this.keys.S.isDown && this.keys.A.isDown && ball.getY() - player.getY() <= 0 && !player.getSprite().body.blocked.down) {
+        else if (playerNum === 1 && this.keys.S.isDown && this.keys.A.isDown && ball.getY() - player.getY() <= 0 && !player.getSprite().body.blocked.down || playerNum === 2 && this.cursors.down.isDown && this.cursors.left.isDown && ball.getY() - player.getY() <= 0 && !player.getSprite().body.blocked.down) {
             ball.setVelocityY(700);
             ball.setVelocityX(- 90 - (Math.abs(player.getVelocityX())));
             player.setLastKickTime(currentTime);
@@ -346,7 +345,7 @@ class BaseScene extends Phaser.Scene {
         }
 
         //Down and right kick
-        else if (playerNum === 1 && this.cursors.down.isDown && this.cursors.right.isDown && ball.getY() - player.getY() > 0 && !player.getSprite().body.blocked.down || playerNum === 2 && this.keys.S.isDown && this.keys.D.isDown && ball.getY() - player.getY() > 0 && !player.getSprite().body.blocked.down) {
+        else if (playerNum === 1 && this.keys.S.isDown && this.keys.D.isDown && ball.getY() - player.getY() > 0 && !player.getSprite().body.blocked.down || playerNum === 2 && this.cursors.down.isDown && this.cursors.right.isDown && ball.getY() - player.getY() > 0 && !player.getSprite().body.blocked.down) {
             ball.setVelocityY(700);
             ball.setVelocityX(90 + (Math.abs(player.getVelocityX())));
             player.setLastKickTime(currentTime);
@@ -354,28 +353,28 @@ class BaseScene extends Phaser.Scene {
         }
 
         //Left straight kick
-        else if (playerNum === 1 && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 && this.cursors.right.isUp || playerNum === 2 && this.keys.A.isDown && ball.getX() - player.getX() <= 0 && this.keys.D.isUp) {
+        else if (playerNum === 1 && this.keys.A.isDown && ball.getX() - player.getX() <= 0 && this.keys.D.isUp || playerNum === 2 && this.cursors.left.isDown && ball.getX() - player.getX() <= 0 && this.cursors.right.isUp) {
             ball.setVelocityX(-90 - (Math.abs(player.getVelocityX())));
             player.setLastKickTime(currentTime);
             this.sound.play("kick");
         }
 
         //Right straight kick
-        else if (playerNum === 1 && this.cursors.right.isDown && ball.getX() - player.getX() > 0 && this.cursors.left.isUp || playerNum === 2 && this.keys.D.isDown && this.keys.D.isDown && ball.getX() - player.getX() > 0 && this.keys.A.isUp) {
+        else if (playerNum === 1 && this.keys.D.isDown && this.keys.D.isDown && ball.getX() - player.getX() > 0 && this.keys.A.isUp || playerNum === 2 && this.cursors.right.isDown && ball.getX() - player.getX() > 0 && this.cursors.left.isUp) {
             ball.setVelocityX(90 + (Math.abs(player.getVelocityX())));
             player.setLastKickTime(currentTime);
             this.sound.play("kick");
         }
 
         //Up kick
-        else if (playerNum === 1 && this.cursors.up.isDown || playerNum === 2 && this.keys.W.isDown) {
+        else if (playerNum === 1 && this.keys.W.isDown || playerNum === 2 && this.cursors.up.isDown) {
             ball.setVelocityY(-90 - (Math.abs(player.getVelocityY() * 2)));
             player.setLastKickTime(currentTime);
             this.sound.play("kick");
         }
 
         //Down kick
-        else if (playerNum === 1 && this.cursors.down.isDown && !player.getSprite().body.blocked.down || playerNum === 2 && this.keys.S.isDown && !player.getSprite().body.blocked.down) {
+        else if (playerNum === 1 && this.keys.S.isDown && !player.getSprite().body.blocked.down || playerNum === 2 && this.cursors.down.isDown && !player.getSprite().body.blocked.down) {
             ball.setVelocityY(90 + (Math.abs(player.getVelocityY() * 2)));
             player.setLastKickTime(currentTime);
             this.sound.play("kick");
@@ -383,9 +382,10 @@ class BaseScene extends Phaser.Scene {
     }
 
     update() {
-        //Movment & Controls
-        this.playerOne.update(this.cursors.up, this.cursors.left, this.cursors.down, this.cursors.right);
-        this.playerTwo.update(this.keys.W, this.keys.A, this.keys.S, this.keys.D);
+        //Movment & 
+        this.playerOne.update(this.keys.W, this.keys.A, this.keys.S, this.keys.D);
+        this.playerTwo.update(this.cursors.up, this.cursors.left, this.cursors.down, this.cursors.right);
+        
         this.soccerBall.update();
 
         //Update timer to count down from 2:00 to 0
@@ -407,22 +407,22 @@ class BaseScene extends Phaser.Scene {
         //Set up animation controls
 
         if (this.cursors.left.isDown) {
-            this.playerTwo.play(playerAnimations['left'], true);
+            this.playerTwo.play(player2Animations['left'], true);
             console.log("p2 left");
         } 
         
         else if (this.cursors.right.isDown) {
-            this.playerTwo.play(playerAnimations['right'], true);
+            this.playerTwo.play(player2Animations['right'], true);
             console.log("p2 right");
         }
 
         if (this.keys.A.isDown) {
-            this.playerOne.play(player2Animations['left'], true);
+            this.playerOne.play(playerAnimations['left'], true);
             console.log("p1 left");
         }
         
         else if (this.keys.D.isDown) {
-            this.playerOne.play(player2Animations['right'], true);
+            this.playerOne.play(playerAnimations['right'], true);
             console.log("p1 right");
         }
     }
