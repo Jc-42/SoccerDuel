@@ -143,11 +143,11 @@ class BaseScene extends Phaser.Scene {
                 ball.setVelocityX(0);
                 ball.setVelocityY(0);
                 this.playerTwo.increaseScore();
-                this.playerOne.setX(config.width * .75);
+                this.playerOne.setX(config.width / 4);
                 this.playerOne.setY(config.height - 104);
                 this.playerOne.setVelocityX(0);
                 this.playerOne.setVelocityY(0);
-                this.playerTwo.setX(config.width / 4);
+                this.playerTwo.setX(config.width * .75);
                 this.playerTwo.setY(config.height - 104);
                 this.playerTwo.setVelocityX(0);
                 this.playerTwo.setVelocityY(0);
@@ -164,11 +164,11 @@ class BaseScene extends Phaser.Scene {
                 ball.setVelocityX(0);
                 ball.setVelocityY(0);
                 this.playerOne.increaseScore();
-                this.playerOne.setX(config.width * .75);
+                this.playerOne.setX(config.width / 4);
                 this.playerOne.setY(config.height - 104);
                 this.playerOne.setVelocityX(0);
                 this.playerOne.setVelocityY(0);
-                this.playerTwo.setX(config.width / 4);
+                this.playerTwo.setX(config.width * .75);
                 this.playerTwo.setY(config.height - 104);
                 this.playerTwo.setVelocityX(0);
                 this.playerTwo.setVelocityY(0);
