@@ -294,7 +294,9 @@ class BaseScene extends Phaser.Scene {
                 this.scene.start("HomeScene");
                 if (currentMap === "moonScene") {
                     this.sound.stopByKey("moonTheme");
-                    this.sound.play("titleMusic");
+                    this.sound.play("titleMusic", {
+                        loop: true
+                    })
                 }
 
             })
