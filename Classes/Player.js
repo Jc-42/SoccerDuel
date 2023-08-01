@@ -115,12 +115,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
        */
 
-        if (this.directionFacing === 1) {
-            this.setFlipX(false);
-        } else {
-            this.setFlipX(true);
-        }
-
         //Jump
         if (up.isDown && this.body.blocked.down) {
             this.setVelocityY(-500)
