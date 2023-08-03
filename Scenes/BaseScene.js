@@ -409,17 +409,20 @@ class BaseScene extends Phaser.Scene {
         
         //Stop animations if player isnt moving
         if(!this.cursors.left.isDown && !this.cursors.right.isDown || this.cursors.left.isDown && this.cursors.right.isDown ){
+            this.playerTwo.setOrigin(.5, .5); //Reset the origin
             this.playerTwo.anims.stop();
             this.playerTwo.setFlipX(false);
         }
 
         else if (this.cursors.left.isDown) {
+            this.playerTwo.setOrigin(.4, .5); //Offset the origin so that the colliders line up when the player is moving
             this.playerTwo.play(player2Animations['left'], true);
             this.playerTwo.setFlipX(true); //Apperantly the player doesnt have a left animation?? the animations loaded as ['left'] and ['right] are identicle so you must use flipX when calling ['left'] 
             console.log("p2 left");
         } 
         
         else if (this.cursors.right.isDown) {
+            this.playerTwo.setOrigin(.4, .5); //Offset the origin so that the colliders line up when the player is moving
             this.playerTwo.play(player2Animations['right'], true);
             this.playerTwo.setFlipX(false);
             console.log("p2 right");
@@ -427,17 +430,20 @@ class BaseScene extends Phaser.Scene {
 
         //Stop animations if player isnt moving
         if(!this.keys.A.isDown && !this.keys.D.isDown || this.keys.A.isDown && this.keys.D.isDown){
-            this.playerOne.setFlipX(false);
+            this.playerOne.setOrigin(.5, .5);//Reset the origin
             this.playerOne.anims.stop();
+            this.playerOne.setFlipX(false);
         }
 
         else if (this.keys.A.isDown) {
+            this.playerOne.setOrigin(.4, .5); //Offset the origin so that the colliders line up when the player is moving
             this.playerOne.play(playerAnimations['left'], true);
             this.playerOne.setFlipX(true);
             console.log("p1 left");
         }
         
         else if (this.keys.D.isDown) {
+            this.playerOne.setOrigin(.4, .5); //Offset the origin so that the colliders line up when the player is moving
             this.playerOne.play(playerAnimations['right'], true);
             this.playerOne.setFlipX(false);
             console.log("p1 right");
