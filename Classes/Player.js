@@ -10,8 +10,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setBounce(0, 0);
         this.setCollideWorldBounds(true);
         this.setScale(3.4);
-        //this.body.setSize(9, 24, 4.5, 12);
-        this.setBodySize(10, 20, true);
+        //this.setSize(9, 24, 4.5, 102);
+        this.setBodySize(10, 28, false);
         this.lastKickTime = 0;
         this.num = n;
         this.directionFacing = 1;
