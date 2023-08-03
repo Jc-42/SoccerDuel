@@ -78,14 +78,14 @@ class BaseScene extends Phaser.Scene {
                 {
                     prefix: 'playerrunningright0',
                     end: 8, zeroPad: 2
-                }), repeat: -1, frameRate: 10
+                }), repeat: -1, frameRate: 12
         });
         var lefta = this.anims.create({
             key: 'player', frames: this.anims.generateFrameNames('players',
                 {
                     prefix: 'playerrunningleft0',
                     start: 9, end: 16, zeroPad: 2
-                }), repeat: -1, frameRate: 10
+                }), repeat: -1, frameRate: 12
         });
         //playerAnimations['idle'] = idle;
         playerAnimations['right'] = righta;
